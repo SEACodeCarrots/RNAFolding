@@ -29,6 +29,7 @@ Week 5
 Week 1 HW: read about D3
 
 Week 2 HW: 
+
 Margaret: 
 * add null circles to the page, 
 * draw more shapes
