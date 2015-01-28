@@ -11,13 +11,27 @@ var width = window.innerWidth,
     height = window.innerHeight,
     smallDim = Math.min(width, height),
     hypo = smallDim * 1 / 5,
+
+    // 2d array of possible values for each NT
+    nucleoArray = [
+        {"initKey": "A", "name": "Adenine", "color": "yellow"}, 
+        {"initKey": "U", "name": "Uracil", "color": "blue"}, 
+        {"initKey": "G", "name": "Guanine", "color": "red"}, 
+        {"initKey": "C", "name": "Cytosine", "color": "green"}, 
+        {"initKey": "R", "name": "puRine", "color": "orange"}, 
+        {"initKey": "Y", "name": "pYrimidine", "color": "turquoise"}, 
+        {"initKey": "N", "name": "unkNown", "color": "gray"}, 
+        {"initKey": "X", "name": "X null", "color": "white"}],
+
     // set up an initial sequence
-
-    nucleoArray =[["A","Adenine", "yellow"], ["U","Uracil", "blue"], ["G", "Guanine", "red"], ["C","Cytosine", "green"], 
-        ["R", "puRine", "orange"], ["Y", "pYrimidine", "turquoise"], ["N","unkNown", "grey"], ["X", "X null", "white" ]],
     initialNTArray = ["A", "A", "A", "A", "A", "A",  "A", "A"];
-// select the html body, put origin in center of window
 
+// turn array into nest
+var nucleoNest = d3.nest()
+    .key(function(d) {return d.initKey})
+    .entries(nucleoArray);
+
+// select the html body, put origin in center of window
 var svg = d3.select("body")
 	.append("svg")
     	.attr("width", width)
