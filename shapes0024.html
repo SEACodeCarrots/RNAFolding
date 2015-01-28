@@ -10,7 +10,6 @@
 var width = window.innerWidth,
     height = window.innerHeight,
     smallDim = Math.min(width, height),
-    hypo = smallDim * 1 / 5,
 
     // 2d array of possible values for each NT
     nucleoArray = [
@@ -40,16 +39,18 @@ var svg = d3.select("body")
     	.attr("transform", "translate(" + (width / 2) + "," + (height / 2) + ")");
 
 // pass in string of 'A's into the function, display them as dots in a circle
-function update(dataArray)  { 
-    var  segment = Math.PI * 2 / dataArray.length,
-         radius = segment * hypo / 3;   
+function update(dataArray)  {
+    //set up vars for proportional positions
+    var segment = Math.PI * 2 / dataArray.length,
+        hypotenuse = smallDim * 1 / 5,
+        radius = segment * hypotenuse / 3;
 
     svg.selectAll("circle")
         .data(dataArray)   
         .enter() // begin to add stuff
         .append("circle") // draw a dot for each nucleotide
-        .attr("cy", function(d, i) {return Math.sin(segment * -i + 11/16 * 2 * Math.PI) * hypo; })
-        .attr("cx", function(d, i) {return Math.cos(segment * -i + 11/16 * 2 * Math.PI) * hypo; })
+        .attr("cy", function(d, i) {return Math.sin(segment * -i + 11/16 * 2 * Math.PI) * hypotenuse; })
+        .attr("cx", function(d, i) {return Math.cos(segment * -i + 11/16 * 2 * Math.PI) * hypotenuse; })
         .attr("r", radius)
         .style("fill", function(d, i) {return "hsl(" + i / dataArray.length * 360 + ",100%,50%)"});}
 
