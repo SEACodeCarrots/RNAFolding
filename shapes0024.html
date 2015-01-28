@@ -15,7 +15,7 @@ var width = window.innerWidth,
     chars = d3.range(Math.floor(Math.random() * 50) + 3),
 
     nucleoArray =[["A","Adenine", "yellow"], ["U","Uracil", "blue"], ["G", "Guanine", "red"], ["C","Cytosine", "green"], 
-        ["R", "PuRine", "orange"], ["Y", "pYrimidine", "turquoise"], ["N","unkNown", "grey"], ["X", "X null", "white" ]],
+        ["R", "puRine", "orange"], ["Y", "pYrimidine", "turquoise"], ["N","unkNown", "grey"], ["X", "X null", "white" ]],
     initialNTArray = ["A", "A", "A", "A", "A", "A",  "A", "A"];
 // select the html body, put origin in center of window
 
@@ -31,7 +31,6 @@ function update(dataArray)  {
     var  segment = Math.PI * 2 / dataArray.length,
          radius = segment * hypo / 3;   
 
-    //join 33 to 43 so selecting is all in one section
     svg.selectAll("circle")
         .data(dataArray)   
         .enter() // begin to add stuff
