@@ -27,3 +27,15 @@ Week 5
 
 #### To Do
 Week 1 HW: read about D3
+
+Week 2 HW: 
+Margaret: 
+* add null circles to the page, 
+* draw more shapes
+* put text on 
+* link nucleotides to shapes
+
+Sarah:
+* make shapes clickable for scrolling (using dummy variables)
+* make dropdown menu
+* draw model of data input
