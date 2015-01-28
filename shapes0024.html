@@ -10,7 +10,7 @@
 var width = window.innerWidth,
     height = window.innerHeight,
     smallDim = Math.min(width, height),
-    hypo = smallDim * 2 / 5,
+    hypo = smallDim * 1 / 5,
     // set up an initial sequence
     chars = d3.range(Math.floor(Math.random() * 50) + 3),
 
@@ -35,21 +35,14 @@ function update(dataArray)  {
     svg.selectAll("circle")
         .data(dataArray)   
         .enter() // begin to add stuff
-        .append("circle"); // draw a dot for each nucleotide
-
-    svg.selectAll("circle")
-        .attr("cy", function(d, i) {return Math.sin(segment * -i + 5/8 * 2 * Math.PI) * hypo; })
-        .attr("cx", function(d, i) {return Math.cos(segment * -i + 5/8 * 2 * Math.PI) * hypo; })
+        .append("circle") // draw a dot for each nucleotide
+        .attr("cy", function(d, i) {return Math.sin(segment * -i + 11/16 * 2 * Math.PI) * hypo; })
+        .attr("cx", function(d, i) {return Math.cos(segment * -i + 11/16 * 2 * Math.PI) * hypo; })
         .attr("r", radius)
         .style("fill", function(d, i) {return "hsl(" + i / dataArray.length * 360 + ",100%,50%)"});}
 
-update(chars);
+update(initialNTArray);
 
-chars = d3.range(Math.floor(Math.random() * 100));
-
-setInterval(function() {
-    update(chars);
-}, 1500);
 
 </script>
 </body>
