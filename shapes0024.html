@@ -5,14 +5,18 @@
 <body>
 <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 <script>
-
+ 
+//set up window size
 var width = window.innerWidth,
     height = window.innerHeight,
     smallDim = Math.min(width, height),
     hypo = smallDim * 2 / 5,
+    // set up an initial sequence
     chars = d3.range(Math.floor(Math.random() * 50) + 3),
-    nucleoArray =[["A","Adenine", "yellow"], ["U","Uracil", "blue"], ["""Guanine", "red"], ["C","Cytosine", "green"], ["N","unkNown", "grey"]];
+    // redo this, but with 'A's instead of random #s
+    nucleoArray =[["A","Adenine", "yellow"], ["U","Uracil", "blue"], ["G", "Guanine", "red"], ["C","Cytosine", "green"], ["N","unkNown", "grey"]];
     
+// select the html body, put origin in center of window
 var svg = d3.select("body")
 	.append("svg")
     	.attr("width", width)
@@ -20,14 +24,16 @@ var svg = d3.select("body")
 	.append("g")
     	.attr("transform", "translate(" + (width / 2) + "," + (height / 2) + ")");
 
+// pass in string of 'A's into the function, display them as dots in a circle
 function update(dataArray)  { 
     var  segment = Math.PI * 2 / dataArray.length,
          radius = segment * hypo / 3;   
 
+    //join 33 to 43 so selecting is all in one section
     svg.selectAll("circle")
-        .data(chars)   
-        .enter()
-        .append("circle");
+        .data(dataArray)   
+        .enter() // begin to add stuff
+        .append("circle"); // draw a dot for each nucleotide
 
     svg.selectAll("circle")
         .attr("cy", function(d, i) {return Math.sin(segment * i) * hypo; })
