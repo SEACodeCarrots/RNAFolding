@@ -54,7 +54,7 @@ function update(dataArray)  {
         .attr("cx", function(d, i) {return Math.cos(segment * -i + 11/16 * 2 * Math.PI) * hypotenuse; })
         .attr("r", radius)
         // fill color is the hsl value depending on number of circles
-        .style("fill", function(d, i) {return "hsl(" + i / dataArray.length * 360 + ",100%,50%)"});
+        .style("fill", function(d, i) {return "hsl(" + i / dataArray.length * 360 + ",100%,50%)"})
         
         // add gray outline on mouseover
         .on("mouseover", function(){d3.select(this)
@@ -63,7 +63,7 @@ function update(dataArray)  {
         // remove gray outline when not mouseover
         .on("mouseout", function(){d3.select(this)
             .style("stroke", "gray")
-            .style("stroke-width", 0);})
+            .style("stroke-width", 0);});}
         // click to scroll through options
         //.on("click", //scroll}
 
