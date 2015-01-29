@@ -10,15 +10,27 @@
 var width = window.innerWidth,
     height = window.innerHeight,
     smallDim = Math.min(width, height),
-    hypo = smallDim * 2 / 5,
+
+    // 2d array of possible values for each NT
+    nucleoArray = [
+        {"initKey": "A", "name": "Adenine", "color": "yellow"}, 
+        {"initKey": "U", "name": "Uracil", "color": "blue"}, 
+        {"initKey": "G", "name": "Guanine", "color": "red"}, 
+        {"initKey": "C", "name": "Cytosine", "color": "green"}, 
+        {"initKey": "R", "name": "puRine", "color": "orange"}, 
+        {"initKey": "Y", "name": "pYrimidine", "color": "turquoise"}, 
+        {"initKey": "N", "name": "unkNown", "color": "gray"}, 
+        {"initKey": "X", "name": "X null", "color": "white"}],
+
     // set up an initial sequence
-    chars = d3.range(Math.floor(Math.random() * 50) + 3),
-
-    nucleoArray =[["A","Adenine", "yellow"], ["U","Uracil", "blue"], ["G", "Guanine", "red"], ["C","Cytosine", "green"], 
-        ["R", "PuRine", "orange"], ["Y", "pYrimidine", "turquoise"], ["N","unkNown", "grey"], ["X", "X null", "white" ]],
     initialNTArray = ["A", "A", "A", "A", "A", "A",  "A", "A"];
-// select the html body, put origin in center of window
 
+// turn array into nest
+var nucleoNest = d3.nest()
+    .key(function(d) {return d.initKey})
+    .entries(nucleoArray);
+
+// select the html body, put origin in center of window
 var svg = d3.select("body")
 	.append("svg")
     	.attr("width", width)
@@ -27,15 +39,19 @@ var svg = d3.select("body")
     	.attr("transform", "translate(" + (width / 2) + "," + (height / 2) + ")");
 
 // pass in string of 'A's into the function, display them as dots in a circle
-function update(dataArray)  { 
-    var  segment = Math.PI * 2 / dataArray.length,
-         radius = segment * hypo / 3;
+function update(dataArray)  {
+    //set up vars for proportional positions
+    var segment = Math.PI * 2 / dataArray.length,
+        hypotenuse = smallDim * 1 / 5,
+        radius = segment * hypotenuse / 3;
+
 
     svg.selectAll("circle")
         .data(dataArray)   
         .enter() // begin to add stuff
-        .attr("cy", function(d, i) {return Math.sin(segment * -i + 5/8 * 2 * Math.PI) * hypo; })
-        .attr("cx", function(d, i) {return Math.cos(segment * -i + 5/8 * 2 * Math.PI) * hypo; })
+        .append("circle") // draw a dot for each nucleotide
+        .attr("cy", function(d, i) {return Math.sin(segment * -i + 11/16 * 2 * Math.PI) * hypotenuse; })
+        .attr("cx", function(d, i) {return Math.cos(segment * -i + 11/16 * 2 * Math.PI) * hypotenuse; })
         .attr("r", radius)
         // fill color is the hsl value depending on number of circles
         .style("fill", function(d, i) {return "hsl(" + i / dataArray.length * 360 + ",100%,50%)"});
@@ -51,7 +67,7 @@ function update(dataArray)  {
         // click to scroll through options
         //.on("click", //scroll}
 
-update(chars);
+update(initialNTArray);
 
 </script>
 </body>
