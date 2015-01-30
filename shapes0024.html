@@ -38,14 +38,14 @@ var svg = d3.select("body")
 	.append("g")
     	.attr("transform", "translate(" + (width / 2) + "," + (height / 2) + ")");
 
-// pass in string of 'A's into the function, display them as dots in a circle
+// pass in string of NTs into the function, display them as dots in a circle
 function update(dataArray)  {
     //set up vars for proportional positions
     var segment = Math.PI * 2 / dataArray.length,
         hypotenuse = smallDim * 1 / 5,
         radius = segment * hypotenuse / 3;
 
-
+    // draw a dot for each array value
     svg.selectAll("circle")
         .data(dataArray)   
         .enter() // begin to add stuff
@@ -63,9 +63,12 @@ function update(dataArray)  {
         // remove gray outline when not mouseover
         .on("mouseout", function(){d3.select(this)
             .style("stroke", "gray")
-            .style("stroke-width", 0);});}
+            .style("stroke-width", 0);});
+        // connect nest data to circles so option are available
+
         // click to scroll through options
         //.on("click", //scroll}
+}
 
 update(initialNTArray);
 
