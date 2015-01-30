@@ -19,8 +19,7 @@ var width = window.innerWidth,
         {"initKey": "C", "name": "Cytosine", "color": "green"}, 
         {"initKey": "R", "name": "puRine", "color": "orange"}, 
         {"initKey": "Y", "name": "pYrimidine", "color": "turquoise"}, 
-        {"initKey": "N", "name": "unkNown", "color": "gray"}, 
-        {"initKey": "X", "name": "X null", "color": "white"}],
+        {"initKey": "N", "name": "unkNown", "color": "gray"}],
 
     // set up an initial sequence
     initialNTArray = ["A", "A", "A", "A", "A", "A",  "A", "A"];
@@ -50,10 +49,14 @@ function update(dataArray)  {
         .data(dataArray)   
         .enter() // begin to add stuff
         .append("circle") // draw a dot for each nucleotide
+        // need to calculate an offset value relative to dataArray.length instead of 11/16
+        // to set top two dots parallel for any size circle
         .attr("cy", function(d, i) {return Math.sin(segment * -i + 11/16 * 2 * Math.PI) * hypotenuse; })
         .attr("cx", function(d, i) {return Math.cos(segment * -i + 11/16 * 2 * Math.PI) * hypotenuse; })
         .attr("r", radius)
+
         // fill color is the hsl value depending on number of circles
+            //get rid of rainbow fill an get fill from nest key corresponding to d
         .style("fill", function(d, i) {return "hsl(" + i / dataArray.length * 360 + ",100%,50%)"})
         
         // add gray outline on mouseover
@@ -67,7 +70,10 @@ function update(dataArray)  {
         // connect nest data to circles so option are available
 
         // click to scroll through options
-        //.on("click", //scroll}
+        //.on("click", //scroll
+
+    // add null dots above top two dots and below lowest two
+        // then expand to allow other shapes
 }
 
 update(initialNTArray);
