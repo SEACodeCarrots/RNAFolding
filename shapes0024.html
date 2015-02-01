@@ -21,15 +21,20 @@ var width = window.innerWidth,
         {"initKey": "Y", "name": "pYrimidine", "color": "turquoise"}, 
         {"initKey": "N", "name": "unkNown", "color": "gray"}],
 
-    // set up an initial sequence
-    initialNTArray = ["A", "A", "A", "A", "A", "A",  "A", "A"];
+    // set up initial sequence for 2-2 loop
+    initial22Loop = ["A", "A", "A", "A", "A", "A",  "A", "A"],
+    // set up initial sequence for 1-1 loop
+    initial11Loop = ["A", "A", "A", "A", "A", "A"],
+    // set up array for nulls ends of loops
+    staticDotArray = ["X", "X", "X", "X"];
 
 // turn array into nest
 var nucleoNest = d3.nest()
     .key(function(d) {return d.initKey})
     .entries(nucleoArray);
 
-// select the html body, put origin in center of window
+// select the html body, add svg element and inside it a new group element, g
+// put origin in center of window
 var svg = d3.select("body")
 	.append("svg")
     	.attr("width", width)
@@ -38,25 +43,35 @@ var svg = d3.select("body")
     	.attr("transform", "translate(" + (width / 2) + "," + (height / 2) + ")");
 
 // pass in string of NTs into the function, display them as dots in a circle
-function update(dataArray)  {
-    //set up vars for proportional positions
+function update(dataArray, nullArray)  {
+    // set up vars for proportional positions
     var segment = Math.PI * 2 / dataArray.length,
         hypotenuse = smallDim * 1 / 5,
         radius = segment * hypotenuse / 3;
 
+    // create a new nest
+    // for each key from dataArray insert a copy of the corresponding
+    // record, key and values, from nucleoNest
+    // so 8 or 6 copies of "A" record depending on loop type on update call
+
+    //    ??? HOW ???
+
+    // then use new nest instead of dataArray for the .activeDot .data
+
     // draw a dot for each array value
-    svg.selectAll("circle")
+    svg.selectAll(".activeDot")
         .data(dataArray)   
         .enter() // begin to add stuff
         .append("circle") // draw a dot for each nucleotide
-        // need to calculate an offset value relative to dataArray.length instead of 11/16
+
+        .attr("class", "activeDot")
         // to set top two dots parallel for any size circle
-        .attr("cy", function(d, i) {return Math.sin(segment * -i + 11/16 * 2 * Math.PI) * hypotenuse; })
-        .attr("cx", function(d, i) {return Math.cos(segment * -i + 11/16 * 2 * Math.PI) * hypotenuse; })
+        .attr("cy", function(d, i) {return Math.sin(segment * -i - 1/4 * 2 * Math.PI - segment/2) * hypotenuse; })
+        .attr("cx", function(d, i) {return Math.cos(segment * -i - 1/4 * 2 * Math.PI - segment/2) * hypotenuse; })
         .attr("r", radius)
 
         // fill color is the hsl value depending on number of circles
-            //get rid of rainbow fill an get fill from nest key corresponding to d
+            // need to get rid of rainbow fill an get fill from  d color once data nest is set up
         .style("fill", function(d, i) {return "hsl(" + i / dataArray.length * 360 + ",100%,50%)"})
         
         // add gray outline on mouseover
@@ -67,16 +82,41 @@ function update(dataArray)  {
         .on("mouseout", function(){d3.select(this)
             .style("stroke", "gray")
             .style("stroke-width", 0);});
-        // connect nest data to circles so option are available
 
         // click to scroll through options
         //.on("click", //scroll
 
+
+    //to be fixed
     // add null dots above top two dots and below lowest two
         // then expand to allow other shapes
+
+    svg.selectAll(".staticDot") // start a new selection of circles classed staticDot
+            .data(nullArray) // attatch nullArray
+            .enter()
+            .append("circle")
+            .attr("class", "staticDot")
+
+            // if i = 0 then  use the cx from dataArray[0]
+            // if i = 3 then use the cx from dataArrat[max]
+            //
+
+            .attr("cx", function(d, i) {return i * 50}) // draw circles 
+            .attr("cy", "0")
+            .attr("r", radius)
+            .style("fill", "white")
+            .style("stroke", "black")
+            .style("stroke-width", 4)
+            .text(function(d) {return d});
+
 }
 
-update(initialNTArray);
+// comment out one of the update calls
+
+// update(initial22Loop, staticDotArray);    // draws circle of 8 NTs
+
+update(initial11Loop, staticDotArray);      // draws circle of 6 NTs for 1-1 loop
+
 
 </script>
 </body>
