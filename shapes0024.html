@@ -7,6 +7,7 @@
 <script>
  
 //set up window size
+// to be replaced with a variable size rectangle with inner size 500 x 800 and origin moved to center
 var width = window.innerWidth,
     height = window.innerHeight,
     smallDim = Math.min(width, height),
@@ -26,9 +27,15 @@ var width = window.innerWidth,
     // set up initial sequence for 1-1 loop
     initial11Loop = ["A", "A", "A", "A", "A", "A"],
     // set up array for nulls ends of loops
-    staticDotArray = ["X", "X", "X", "X"];
+    staticDotArray = ["X", "X", "X", "X"],
 
-// turn array into nest
+    // beginning of data structure for active nucleotide location info
+    active22LoopNT = [
+        {"nTKey": "1", "cx": "", "cy": "", "": ""}
+    ];
+
+// turn nucleoArray into nest
+// get rid of initKey value
 var nucleoNest = d3.nest()
     .key(function(d) {return d.initKey})
     .entries(nucleoArray);
@@ -49,30 +56,27 @@ function update(dataArray, nullArray)  {
         hypotenuse = smallDim * 1 / 5,
         radius = segment * hypotenuse / 3;
 
-    // create a new nest
-    // for each key from dataArray insert a copy of the corresponding
-    // record, key and values, from nucleoNest
-    // so 8 or 6 copies of "A" record depending on loop type on update call
-
-    //    ??? HOW ???
-
-    // then use new nest instead of dataArray for the .activeDot .data
-
+  
     // draw a dot for each array value
-    svg.selectAll(".activeDot")
+    var circles = svg.selectAll(".activeDot")
         .data(dataArray)   
         .enter() // begin to add stuff
         .append("circle") // draw a dot for each nucleotide
 
         .attr("class", "activeDot")
+        // to be changed to access active dot data structure   active22LoopNT is the in-line JSON stub for now
         // to set top two dots parallel for any size circle
         .attr("cy", function(d, i) {return Math.sin(segment * -i - 1/4 * 2 * Math.PI - segment/2) * hypotenuse; })
         .attr("cx", function(d, i) {return Math.cos(segment * -i - 1/4 * 2 * Math.PI - segment/2) * hypotenuse; })
         .attr("r", radius)
-
+        
         // fill color is the hsl value depending on number of circles
             // need to get rid of rainbow fill an get fill from  d color once data nest is set up
         .style("fill", function(d, i) {return "hsl(" + i / dataArray.length * 360 + ",100%,50%)"})
+
+
+        // **************attempt to access nucleoNest and get fill by key  Not Functional***************
+        // .style("fill", function(d) {nucleoNest.key(function(e) {if (d == e.initKey) {return e.color;}})})
         
         // add gray outline on mouseover
         .on("mouseover", function(){d3.select(this)
@@ -84,22 +88,20 @@ function update(dataArray, nullArray)  {
             .style("stroke-width", 0);});
 
         // click to scroll through options
-        //.on("click", //scroll
+        //.on("click", //scroll)
 
 
-    //to be fixed
+    //STUB  to be changed and fixed
     // add null dots above top two dots and below lowest two
         // then expand to allow other shapes
 
     svg.selectAll(".staticDot") // start a new selection of circles classed staticDot
-            .data(nullArray) // attatch nullArray
+            .data(nullArray) // attach nullArray
             .enter()
             .append("circle")
             .attr("class", "staticDot")
 
-            // if i = 0 then  use the cx from dataArray[0]
-            // if i = 3 then use the cx from dataArrat[max]
-            //
+
 
             .attr("cx", function(d, i) {return i * 50}) // draw circles 
             .attr("cy", "0")
@@ -113,7 +115,7 @@ function update(dataArray, nullArray)  {
 
 // comment out one of the update calls
 
-// update(initial22Loop, staticDotArray);    // draws circle of 8 NTs
+// update(initial22Loop, staticDotArray);    // draws circle of 8 NTs for 2-2 loop
 
 update(initial11Loop, staticDotArray);      // draws circle of 6 NTs for 1-1 loop
 
