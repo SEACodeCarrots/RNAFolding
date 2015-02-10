@@ -7,7 +7,7 @@
 <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 <script>
  
-//set up window size
+// set up window size
 var width = window.innerWidth,
     height = window.innerHeight,
 
@@ -16,92 +16,114 @@ var width = window.innerWidth,
     radius = smallDim / 20,
     textHeight = radius * 1.5,
     sizeFactor = smallDim / 900,
-
+// needs background and menus 
 // data and coords for 1-1 loop
     nullData11 = ["X", "X", "X", "X"],
 
     nullCoords11 = [
         [-80, -300],
-        [80, -300],
-        [-80, 300],
-        [80, 300]
+        [80,  -300],
+        [-80,  300],
+        [80,   300]
     ],
 
     activeData11 = ["A", "U", "R", "G", "C", "Y"], 
 
     activeCoords11 = [
-        [-80, -140],
-        [80, -140],
-        [-150, 0],
-        [150, 0],
-        [-80, 140],
-        [80, 140]
+        [ -80,-140],
+        [  80,-140],
+        [-150,   0],
+        [ 150,   0],
+        [ -80, 140],
+        [  80, 140]
     ],
 
 // data and coords for 2-2 loop
     nullData22 = ["X", "X", "X", "X"],
 
     nullCoords22 = [
-        [-80, -350],
+        [-80,-350],
         [80, -350],
         [-80, 350],
-        [80, 330]
+        [80,  330]
     ],
 
     activeData22 = ["A", "U", "R", "G", "C", "Y", "A", "N"], 
 
     activeCoords22 = [
-        [-80, -190],
-        [80, -190],
-        [-190, -80],
-        [190, -80],
-        [-190, 80],
-        [190, 80],
-        [-80, 190],
-        [80, 190]
-    ],
-
+        [ -80, -190],
+        [  80, -190],
+        [-190,  -80],
+        [ 190,  -80],
+        [-190,   80],
+        [ 190,   80],
+        [ -80,  190],
+        [  80,  190]
+    ], 
+// hairpin needs work --- menu for # of bases and extras for 4 NT hairpins to
+// access 6 relevant nts rather than 4
 // data and coords for hairpin
     nullDataHP = ["X", "X"],
 
     nullCoordsHP = [
         [-80, -220],
-        [80, -220]
+        [ 80, -220]
     ],
 
     activeDataHP = ["A", "U", "R", "G", "C", "Y"], 
 
     activeCoordsHP = [
         [-80, -60],
-        [80, -60],
+        [ 80, -60],
         [-150, 80],
-        [150, 80],
+        [150,  80],
         [-80, 220],
-        [80, 220]
-    ];
+        [80,  220]
+    ],
 
-// data and coords for bulge -- needs bulge size of one to six nts -- 
+// data and coords for bulge -- needs bulge size menu of one to six nts -- 
 // rough coords only -- needs exact coords --
     nullDataBG = ["X", "X", "X", "X", "X"],
 
     nullCoordsBG = [
         [-80, -190],
-        [80, -190],
-        [130, 65],
-        [-80, 350],
-        [80, 330]
+        [ 80, -190],
+        [135,   85],
+        [-80,  350],
+        [ 80,  330]
     ],
 
     activeDataBG = ["A", "U", "R", "G",], 
 
     activeCoordsBG = [
         [-80, -60],
-        [80, -60],
-        [-130, 65],
-        [0, 190]
+        [80,  -60],
+        [-135, 85],
+        [0,   190]
+    ],
+
+// data and coords for 1-2 loops 
+// in progress -- not right -- needs exact coords --
+    nullData12 = ["X", "X", "X", "X", "X", "X", "X"],
+
+    nullCoords12 = [
+        [-80, -190],
+        [80,  -190],
+        [135,   85],
+        [80,  -190],
+        [135,   85],
+        [-80,  350],
+        [80,   330]
+    ],
+
+    activeData12 = ["A", "U", "R", "G", "Y", "C", ""], 
+
+    activeCoords12 = [
+        [-80, -60],
+        [80,  -60],
+        [-135, 85],
+        [0,   190]
     ];
-
-
 
 // select the html body, add svg element to body, add group element to svg
 var svg = d3.select("body")
@@ -113,9 +135,10 @@ var svg = d3.select("body")
 // put origin in center of window
     	.attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
-// pass in string of NTs into the function, display them as dots in a circle
+// pass in array of nts, class text subpart, and 2D array of coords
+// display them as dots in a circle
 function update(displayData, displayClass, displayCoords)  {
-
+// change to use structure with
     var nucleoArray = [
         {key: "A", values: ["Adenine", "yellow"]}, 
         {key: "U", values: ["Uracil", "blue"]}, 
@@ -153,10 +176,13 @@ function update(displayData, displayClass, displayCoords)  {
         .on("mouseout", function(){d3.select(this)
             .style("stroke", "gray")
             .style("stroke-width", 0);});
-
         // click to scroll through options
         //.on("click", //scroll)
+        // ? add text to each dot 
+        // ? a lines directly or like text below
 
+// text on circles takes mouseover focus away from circle
+// needs fix  -- attached mouseovers demonstrate this
     var text = svg.selectAll("." + displayClass + "Text") // select potential text of displayClass
         .data(displayData)
         .enter()
@@ -166,8 +192,23 @@ function update(displayData, displayClass, displayCoords)  {
         .attr("x", function(d, i) {return displayCoords[i][0] * sizeFactor}) // position
         .attr("y", function(d, i) {return displayCoords[i][1] * sizeFactor + textHeight / 2.5})
         .attr("text-anchor", "middle")
-        .style("font-size", textHeight + "px"); // size
+        .style("font-size", textHeight + "px") // size 
+// shows how text takes focus of mouseover from dots
+// ? change select this to select corresponding dot
+        // add gray outline on mouseover
+        .on("mouseover", function(){d3.select(this)
+            .style("stroke", "gray")
+            .style("stroke-width", 4);})
+        // remove gray outline when not mouseover
+        .on("mouseout", function(){d3.select(this)
+            .style("stroke", "gray")
+            .style("stroke-width", 0);});
+        // click to scroll through options
+        //.on("click", //scroll)
+
 }
+
+// comment out all but one pair
 
 //update(nullData11, "null11", nullCoords11);      // draws null NTs above and below 1-1 loop
 //update(activeData11, "active11", activeCoords11);// draws circle of 6 NTs for 1-1 loop
@@ -175,11 +216,16 @@ function update(displayData, displayClass, displayCoords)  {
 //update(nullData22, "null22", nullCoords22);      // draws null NTs above and below 2-2 loop
 //update(activeData22, "active22", activeCoords22);// draws circle of 8 NTs for 2-2 loop   
 
-//update(nullDataHP, "nullHP", nullCoordsHP);      // draws null NTs above hairpin
-//update(activeDataHP, "activeHP", activeCoordsHP);// draws circle of 6 NTs for hairpin
+update(nullDataHP, "nullHP", nullCoordsHP);      // draws null NTs above hairpin
+update(activeDataHP, "activeHP", activeCoordsHP);// draws circle of 6 NTs for hairpin
 
-update(nullDataBG, "nullBG", nullCoordsBG);// draws null NTs above and SW of bulge and 1 in circle
-update(activeDataBG, "activeHP", activeCoordsBG);// draws 4 NTs in circle of 5 NTs for bulge
+//update(nullDataBG, "nullBG", nullCoordsBG);// draws null NTs above and SW of bulge and 1 in circle
+//update(activeDataBG, "activeBG", activeCoordsBG);// draws 4 NTs in circle of 5 NTs for bulge
+
+// ----not functional ----
+//update(nullData12, "null12", nullCoords12);// draws null NTs above and SW of 1-2 loop
+//update(activeData12, "active12", activeCoords12);// draws 4 NTs in circle of 5 NTs for bulge
+
 
 </script>
 </body>
