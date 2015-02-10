@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-
 </head>
 <body>
 <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
@@ -17,6 +16,8 @@ var width = window.innerWidth,
     textHeight = radius * 1.5,
     sizeFactor = smallDim / 900,
 // needs background and menus 
+
+// ? separate data to 2nd file
 // data and coords for 1-1 loop
     nullData11 = ["X", "X", "X", "X"],
 
@@ -30,22 +31,22 @@ var width = window.innerWidth,
     activeData11 = ["A", "U", "R", "G", "C", "Y"], 
 
     activeCoords11 = [
-        [ -80,-140],
-        [  80,-140],
-        [-150,   0],
-        [ 150,   0],
-        [ -80, 140],
-        [  80, 140]
+        [ -80, -140],
+        [  80, -140],
+        [-150,    0],
+        [ 150,    0],
+        [ -80,  140],
+        [  80,  140]
     ],
 
 // data and coords for 2-2 loop
     nullData22 = ["X", "X", "X", "X"],
 
     nullCoords22 = [
-        [-80,-350],
-        [80, -350],
-        [-80, 350],
-        [80,  330]
+        [-80, -350],
+        [ 80, -350],
+        [-80,  350],
+        [ 80,  330]
     ],
 
     activeData22 = ["A", "U", "R", "G", "C", "Y", "A", "N"], 
@@ -73,12 +74,12 @@ var width = window.innerWidth,
     activeDataHP = ["A", "U", "R", "G", "C", "Y"], 
 
     activeCoordsHP = [
-        [-80, -60],
-        [ 80, -60],
-        [-150, 80],
-        [150,  80],
-        [-80, 220],
-        [80,  220]
+        [ -80, -60],
+        [  80, -60],
+        [-150,  80],
+        [ 150,  80],
+        [ -80, 220],
+        [  80, 220]
     ],
 
 // data and coords for bulge -- needs bulge size menu of one to six nts -- 
@@ -96,33 +97,33 @@ var width = window.innerWidth,
     activeDataBG = ["A", "U", "R", "G",], 
 
     activeCoordsBG = [
-        [-80, -60],
-        [80,  -60],
-        [-135, 85],
-        [0,   190]
+        [ -80,  -60],
+        [  80,  -60],
+        [ -135,  85],
+        [    0, 190]
     ],
 
 // data and coords for 1-2 loops 
 // in progress -- not right -- needs exact coords --
-    nullData12 = ["X", "X", "X", "X", "X", "X", "X"],
+    nullData12 = ["X", "X", "X", "X"],
 
     nullCoords12 = [
-        [-80, -190],
-        [80,  -190],
-        [135,   85],
-        [80,  -190],
-        [135,   85],
+        [-80, -350],
+        [ 80, -350],
         [-80,  350],
-        [80,   330]
+        [ 80,  350]
     ],
 
-    activeData12 = ["A", "U", "R", "G", "Y", "C", ""], 
+    activeData12 = ["A", "U", "R", "G", "Y", "C", "N"], 
 
     activeCoords12 = [
-        [-80, -60],
-        [80,  -60],
-        [-135, 85],
-        [0,   190]
+        [ -80,  -60],
+        [  80,  -60],
+        [ 135,   85],
+        [   0, -190],
+        [ 135,  -85],
+        [-135,   85],
+        [   0,  190]
     ];
 
 // select the html body, add svg element to body, add group element to svg
@@ -140,14 +141,14 @@ var svg = d3.select("body")
 function update(displayData, displayClass, displayCoords)  {
 // change to use structure with
     var nucleoArray = [
-        {key: "A", values: ["Adenine", "yellow"]}, 
-        {key: "U", values: ["Uracil", "blue"]}, 
-        {key: "G", values: ["Guanine", "red"]}, 
-        {key: "C", values: ["Cytosine","green"]}, 
-        {key: "R", values: ["puRine", "orange"]}, 
+        {key: "A", values: ["Adenine",    "yellow"]}, 
+        {key: "U", values: ["Uracil",     "blue"]}, 
+        {key: "G", values: ["Guanine",    "red"]}, 
+        {key: "C", values: ["Cytosine",   "green"]}, 
+        {key: "R", values: ["puRine",     "orange"]}, 
         {key: "Y", values: ["pYrimidine", "turquoise"]}, 
-        {key: "N", values: ["unkNown", "gray"]},
-        {key: "X", values: ["X null", "pink"]}
+        {key: "N", values: ["unkNown",    "silver"]},
+        {key: "X", values: ["X null",     "pink"]}
     ];
   
     // draw a dot for each array value
@@ -179,7 +180,7 @@ function update(displayData, displayClass, displayCoords)  {
         // click to scroll through options
         //.on("click", //scroll)
         // ? add text to each dot 
-        // ? a lines directly or like text below
+        // ? add lines directly to dotsor like text below
 
 // text on circles takes mouseover focus away from circle
 // needs fix  -- attached mouseovers demonstrate this
@@ -222,10 +223,9 @@ update(activeDataHP, "activeHP", activeCoordsHP);// draws circle of 6 NTs for ha
 //update(nullDataBG, "nullBG", nullCoordsBG);// draws null NTs above and SW of bulge and 1 in circle
 //update(activeDataBG, "activeBG", activeCoordsBG);// draws 4 NTs in circle of 5 NTs for bulge
 
-// ----not functional ----
+// ----working but bad coords ----
 //update(nullData12, "null12", nullCoords12);// draws null NTs above and SW of 1-2 loop
-//update(activeData12, "active12", activeCoords12);// draws 4 NTs in circle of 5 NTs for bulge
-
+//update(activeData12, "active12", activeCoords12);// draws 7 NTs in circle for 1-2 loop
 
 </script>
 </body>
