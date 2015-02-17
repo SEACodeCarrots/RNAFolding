@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <title>RNAFolding</title>
+    <!-- needs styling pulled into css and classed used to set classes in script -->
 </head>
 <body>
 <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
@@ -46,7 +48,7 @@ var width = window.innerWidth,
         [-80, -350],
         [ 80, -350],
         [-80,  350],
-        [ 80,  330]
+        [ 80,  350]
     ],
 
     activeData22 = ["A", "U", "R", "G", "C", "Y", "A", "N"], 
@@ -219,13 +221,15 @@ function update(displayData, displayClass, displayCoords)  {
                       //  .style("fill", nucleoArray[(j + 1) % (nucleoArray.length - 1)].values[1])
                         .text(function(d, k) {  // update text to new d
                             displayData[i] = d;  // update displayData to new d
-                            d3.selectAll("." + displayClass + "Circle")
+                            var circleSet = d3.selectAll("." + displayClass + "Circle")
                                 .style("fill", function(e, l) {if (l == i) {
                                     var m = 0;
                                     for (var m = 0; m < nucleoArray.length; m++) {
-                                         if (nucleoArray[m].key == d) {
+                                        if (nucleoArray[m].key == d) {
+
                                             return nucleoArray[m].values[1];
-                                         };
+                                        }
+                                       
                                      }; 
                                 };});
 
@@ -250,11 +254,11 @@ function update(displayData, displayClass, displayCoords)  {
 
 // comment out all but one pair
 
-update(nullData11, "null", nullCoords11);      // draws null NTs above and below 1-1 loop
-activeData11 = update(activeData11, "active", activeCoords11);// draws circle of 6 NTs for 1-1 loop
+//update(nullData11, "null", nullCoords11);      // draws null NTs above and below 1-1 loop
+//activeData11 = update(activeData11, "active", activeCoords11);// draws circle of 6 NTs for 1-1 loop
 
-//update(nullData22, "null", nullCoords22);      // draws null NTs above and below 2-2 loop
-//activeData22 = update(activeData22, "active", activeCoords22);// draws circle of 8 NTs for 2-2 loop   
+update(nullData22, "null", nullCoords22);      // draws null NTs above and below 2-2 loop
+activeData22 = update(activeData22, "active", activeCoords22);// draws circle of 8 NTs for 2-2 loop   
 
 //update(nullDataHP, "null", nullCoordsHP);      // draws null NTs above hairpin
 //activeDataHP = update(activeDataHP, "active", activeCoordsHP);// draws circle of 6 NTs for hairpin
@@ -262,7 +266,7 @@ activeData11 = update(activeData11, "active", activeCoords11);// draws circle of
 //update(nullDataBG, "null", nullCoordsBG);// draws null NTs above and SW of bulge and 1 in circle
 //activeDataBG = update(activeDataBG, "active", activeCoordsBG);// draws 4 NTs in circle of 5 NTs for bulge
 
-// ----not working and bad coords ---- 
+// ----working but bad coords ---- 
 //update(nullData12, "null", nullCoords12);// draws null NTs above and SW of 1-2 loop
 //activeData12 = update(activeData12, "active", activeCoords12);// draws 7 NTs in circle for 1-2 loop
 
