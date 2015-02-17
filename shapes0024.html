@@ -137,7 +137,7 @@ var svg = d3.select("body")
     	.attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
 // pass in array of nts, class text subpart, and 2D array of coords
-// display them as dots in a circle
+// display them as dots per coordinates
 function update(displayData, displayClass, displayCoords)  {
 // change to use structure with
     var nucleoArray = [
@@ -205,9 +205,29 @@ function update(displayData, displayClass, displayCoords)  {
             // remove gray outline when not mouseover
             .on("mouseout", function(){d3.select(this)
                 .style("stroke", "gray")
-                .style("stroke-width", 0);});};
+                .style("stroke-width", 0);})
+            .on("click", function(d, i) {
+                var j = 0,
+                    clickedText = d3.select(this);
+                for (j = 0; j < nucleoArray.length; j++) {
+                    if (nucleoArray[j].key == d) {
+                        clickedText.data(nucleoArray[(j + 1) % (nucleoArray.length - 1)].key)
+                            .style("fill", "magenta")
+                            .text(function(d, k) {
+                                displayData[i] = d;
+                                return d + displayData[i];
+                            });
+
+                        
+
+                    };
+                };
+
+            });
+        };
         // click to scroll through options
         //.on("click", //scroll)
+    return displayData;
 
 }
 
@@ -220,7 +240,7 @@ function update(displayData, displayClass, displayCoords)  {
 //update(activeData22, "active", activeCoords22);// draws circle of 8 NTs for 2-2 loop   
 
 update(nullDataHP, "null", nullCoordsHP);      // draws null NTs above hairpin
-update(activeDataHP, "active", activeCoordsHP);// draws circle of 6 NTs for hairpin
+activeDataHP = update(activeDataHP, "active", activeCoordsHP);// draws circle of 6 NTs for hairpin
 
 //update(nullDataBG, "null", nullCoordsBG);// draws null NTs above and SW of bulge and 1 in circle
 //update(activeDataBG, "active", activeCoordsBG);// draws 4 NTs in circle of 5 NTs for bulge
