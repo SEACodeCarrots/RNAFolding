@@ -33,12 +33,12 @@ var width = window.innerWidth,
     activeData11 = ["A", "U", "R", "G", "C", "Y"], 
 
     activeCoords11 = [
-        [ -80, -140],
-        [  80, -140],
-        [-150,    0],
-        [ 150,    0],
-        [ -80,  140],
-        [  80,  140]
+        [ -80, -140], // col 1
+        [  80, -140], // col 2
+        [-150,    0], // table 1
+        [ 150,    0], // table 2
+        [ -80,  140], // row 1
+        [  80,  140]  // row 2
     ],
 
 // data and coords for 2-2 loop
@@ -251,7 +251,7 @@ function update(displayData, displayClass, displayCoords)  {
     return displayData;
 
 }
-
+// active data returned from update needs to generate search for lowest energy matching sequence
 // comment out all but one pair
 
 //update(nullData11, "null", nullCoords11);      // draws null NTs above and below 1-1 loop
