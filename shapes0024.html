@@ -91,7 +91,7 @@ var width = window.innerWidth,
         [ 80, -190],
         [135,   85],
         [-80,  350],
-        [ 80,  330]
+        [ 80,  350]
     ],
 
     activeDataBG = ["A", "U", "R", "G",], 
@@ -151,7 +151,7 @@ function update(displayData, displayClass, displayCoords)  {
         {key: "X", values: ["X null",     "pink"]}
     ];
   
-    // draw a dot for each array value
+    // draw a dot for each value in displayData per coords in displayData
     var circles = svg.selectAll("." + displayClass + "Circle")// select all potential display circles
         .data(displayData) // attach displayData
         .enter()
@@ -181,10 +181,10 @@ function update(displayData, displayClass, displayCoords)  {
         // click to scroll through options
         //.on("click", //scroll)
         // ? add text to each dot 
-        // ? add lines directly to dotsor like text below
+        // ? add lines directly to dots or like text below
 
 // text on circles takes mouseover focus away from circle
-// needs fix  -- attached mouseovers demonstrate this
+// needs fix  -- text mouseovers demonstrate this
     var text = svg.selectAll("." + displayClass + "Text") // select potential text of displayClass
         .data(displayData)
         .enter()
@@ -212,10 +212,10 @@ function update(displayData, displayClass, displayCoords)  {
                 for (j = 0; j < nucleoArray.length; j++) {
                     if (nucleoArray[j].key == d) {
                         clickedText.data(nucleoArray[(j + 1) % (nucleoArray.length - 1)].key)
-                            .style("fill", "magenta")
+                            .style("fill", nucleoArray[(j + 1) % (nucleoArray.length - 1)].values[0])
                             .text(function(d, k) {
                                 displayData[i] = d;
-                                return d + displayData[i];
+                                return d;
                             });
 
                         
@@ -227,27 +227,29 @@ function update(displayData, displayClass, displayCoords)  {
         };
         // click to scroll through options
         //.on("click", //scroll)
+
+    //needs a done button for ending function and retuning array
     return displayData;
 
 }
 
 // comment out all but one pair
 
-//update(nullData11, "null", nullCoords11);      // draws null NTs above and below 1-1 loop
-//update(activeData11, "active", activeCoords11);// draws circle of 6 NTs for 1-1 loop
+update(nullData11, "null", nullCoords11);      // draws null NTs above and below 1-1 loop
+activeData11 = update(activeData11, "active", activeCoords11);// draws circle of 6 NTs for 1-1 loop
 
 //update(nullData22, "null", nullCoords22);      // draws null NTs above and below 2-2 loop
-//update(activeData22, "active", activeCoords22);// draws circle of 8 NTs for 2-2 loop   
+//activeData22 = update(activeData22, "active", activeCoords22);// draws circle of 8 NTs for 2-2 loop   
 
-update(nullDataHP, "null", nullCoordsHP);      // draws null NTs above hairpin
-activeDataHP = update(activeDataHP, "active", activeCoordsHP);// draws circle of 6 NTs for hairpin
+//update(nullDataHP, "null", nullCoordsHP);      // draws null NTs above hairpin
+//activeDataHP = update(activeDataHP, "active", activeCoordsHP);// draws circle of 6 NTs for hairpin
 
 //update(nullDataBG, "null", nullCoordsBG);// draws null NTs above and SW of bulge and 1 in circle
-//update(activeDataBG, "active", activeCoordsBG);// draws 4 NTs in circle of 5 NTs for bulge
+//activeDataBG = update(activeDataBG, "active", activeCoordsBG);// draws 4 NTs in circle of 5 NTs for bulge
 
 // ----working but bad coords ----
 //update(nullData12, "null", nullCoords12);// draws null NTs above and SW of 1-2 loop
-//update(activeData12, "active", activeCoords12);// draws 7 NTs in circle for 1-2 loop
+//activeData12 = update(activeData12, "active", activeCoords12);// draws 7 NTs in circle for 1-2 loop
 
 </script>
 </body>
