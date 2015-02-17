@@ -170,14 +170,14 @@ function update(displayData, displayClass, displayCoords)  {
             
         });
         // add gray outline on mouseover
-        if (displayClass == "active") {
-            circles.on("mouseover", function(){d3.select(this)
-                .style("stroke", "gray")
-                .style("stroke-width", 4);})
-            // remove gray outline when not mouseover
-            .on("mouseout", function(){d3.select(this)
-                .style("stroke", "gray")
-                .style("stroke-width", 0);});};
+    if (displayClass == "active") {
+        circles.on("mouseover", function(){d3.select(this)
+            .style("stroke", "gray")
+            .style("stroke-width", 4);})
+        // remove gray outline when not mouseover
+        .on("mouseout", function(){d3.select(this)
+            .style("stroke", "gray")
+            .style("stroke-width", 0);});};
         // click to scroll through options
         //.on("click", //scroll)
         // ? add text to each dot 
@@ -198,33 +198,36 @@ function update(displayData, displayClass, displayCoords)  {
 // shows how text takes focus of mouseover from dots
 // ? change select this to select corresponding dot
         // add gray outline on mouseover
-        if (displayClass == "active") {
-            text.on("mouseover", function(){d3.select(this)
-                .style("stroke", "gray")
-                .style("stroke-width", 4);})
-            // remove gray outline when not mouseover
-            .on("mouseout", function(){d3.select(this)
-                .style("stroke", "gray")
-                .style("stroke-width", 0);})
-            .on("click", function(d, i) {
-                var j = 0,
-                    clickedText = d3.select(this);
-                for (j = 0; j < nucleoArray.length; j++) {
-                    if (nucleoArray[j].key == d) {
-                        clickedText.data(nucleoArray[(j + 1) % (nucleoArray.length - 1)].key)
-                            .style("fill", nucleoArray[(j + 1) % (nucleoArray.length - 1)].values[0])
-                            .text(function(d, k) {
-                                displayData[i] = d;
-                                return d;
-                            });
+    if (displayClass == "active") {  // only allow active nts to respond to mouse
+        text.on("mouseover", function(){d3.select(this)
+            .style("stroke", "gray")
+            .style("stroke-width", 4);})
+        // remove gray outline when not mouseover
+        .on("mouseout", function(){d3.select(this)
+            .style("stroke", "gray")
+            .style("stroke-width", 0);})
+        // on click
+        .on("click", function(d, i) {
+            var j = 0,
+                clickedText = d3.select(this);
+            // cycle thru nucleoArray by j, match key to d and change d to nucleoArray next value
+            for (j = 0; j < nucleoArray.length; j++) {
+                if (nucleoArray[j].key == d) {
+                    clickedText.data(nucleoArray[(j + 1) % (nucleoArray.length - 1)].key)
+                        .style("fill", nucleoArray[(j + 1) % (nucleoArray.length - 1)].values[1])
+                        .text(function(d, k) {  // update text to new d
+                            displayData[i] = d;  // update displayData to new d
+                          //  circles[d].style("fill", "yellow");
+                            return d;
+                        });
 
-                        
+                    
 
-                    };
                 };
+            };
 
-            });
-        };
+        });
+    };
         // click to scroll through options
         //.on("click", //scroll)
 
