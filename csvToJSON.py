@@ -31,10 +31,18 @@ def getValues(fileName):
 
 
 loop_2_2_test = getValues('/Users/sarahguermond/Files/Loop_2_2.csv')
-#pprint.pprint(loop_2_2)
-
 loop_1_2 = getValues('/Users/sarahguermond/Files/Loop_1_2.csv')
-pprint.pprint(loop_1_2)
+bulge_1nt = getValues('/Users/sarahguermond/Files/Bulge_1nt.csv')
+bulge_2nt = getValues('/Users/sarahguermond/Files/Bulge_2nt.csv')
+bulge_3nt = getValues('/Users/sarahguermond/Files/Bulge_3nt.csv')
+bulge_4nt = getValues('/Users/sarahguermond/Files/Bulge_4nt.csv')
+bulge_5nt = getValues('/Users/sarahguermond/Files/Bulge_5nt.csv')
+bulge_6nt = getValues('/Users/sarahguermond/Files/Bulge_6nt.csv')
+hairpin = getValues('/Users/sarahguermond/Files/Hairpin.csv')
+loop_1_1_GG = getValues('/Users/sarahguermond/Files/Loop_1_1_GG.csv')
+loop_1_1_UU = getValues('/Users/sarahguermond/Files/Loop_1_1_UU.csv')
+loop_1_1_noboost = getValues('/Users/sarahguermond/Files/Loop_1_1.csv')
+
 
 # all other rows
 # for string1 in dictionary1:
