@@ -43,22 +43,5 @@ loop_1_1_GG = getValues('/Users/sarahguermond/Files/Loop_1_1_GG.csv')
 loop_1_1_UU = getValues('/Users/sarahguermond/Files/Loop_1_1_UU.csv')
 loop_1_1_noboost = getValues('/Users/sarahguermond/Files/Loop_1_1.csv')
 
-
-# all other rows
-# for string1 in dictionary1:
-	# string1[first field] = value
-
-#read in hairpins
-#hairpins = io.open('~/Files/EnergyChart_Hairpin.csv', 'r')
-
-#read in 1-2 loop
-#loop_1_2 = io.open('~/Files/EnergyChart_1_2Loop.csv', 'r')
-
-#read in 1-1 loop
-#loop_1_1 = io.open('~/Files/EnergyChart_1_1Loop.csv', 'r')
-
-#read in bulge
-#bulge = io.open('~/Files/EnergyChart_Bulge.csv', 'r')
-
-#make typeToSubtype
-#make subtypeTo1stNuc
+# TO DO:
+# actually put this stuff into JSON and link to front end
