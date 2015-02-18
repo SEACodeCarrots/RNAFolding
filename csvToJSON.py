@@ -28,10 +28,11 @@ for line in string2ToEnergy:
 	lineList = line.strip().split(",")
 	string2 = lineList[0] # row names
 	# get index and value for all keys in loop_2_2 (col names)
+	num = 1
 	for string1, value in loop_2_2.iteritems():
-		num = 1
 		if string2 not in loop_2_2[string1]:
 			loop_2_2[string1][string2] = lineList[num]
+			#print num
 		num += 1
 				#print lineList[value]
 				#string1[string2] = {}
