@@ -2,6 +2,7 @@
 # this script converts the csv energy tables into a JSON file
 
 import io
+import pprint
 
 #read in 2-2 loop
 # FIRST ROW - comma is field separator
@@ -17,15 +18,35 @@ for string1 in lineList[1:]: #skip the first item because it's just table label
 	else:
 		continue
 
+#print loop_2_2
 
 # ALL OTHER ROWS
-#string2ToEnergy = io.open('/Users/sarahguermond/Files/Loop_2_2.csv', 'r')
-#for line in string2ToEnergy:
-#	lineList = line.strip().split(",")
-#	string2 = lineList[0]
+string2ToEnergy = io.open('/Users/sarahguermond/Files/Loop_2_2.csv', 'r')
+#skip first line
+string2ToEnergy.readline()
+for line in string2ToEnergy:
+	lineList = line.strip().split(",")
+	string2 = lineList[0] # row names
 	# get index and value for all keys in loop_2_2 (col names)
+	for string1, value in loop_2_2.iteritems():
+		num = 1
+		if string2 not in loop_2_2[string1]:
+			loop_2_2[string1][string2] = lineList[num]
+		num += 1
+				#print lineList[value]
+				#string1[string2] = {}
+				#string1[string2] = lineList[num]
+				#print type(string1)
+		#else:
+		#	continue
+
+pprint.pprint(loop_2_2)
+#print loop_2_2
 #	for index, string1 in enumerate(loop_2_2):
-#		loop_2_2[string1[string2]] = lineList[index+1]
+#		print index, string1, string2
+		
+		#print loop_2_2[string1[string2]]
+		#loop_2_2[string1[string2]] = lineList[index+1]
 #string2ToEnergy.close()
 
 
