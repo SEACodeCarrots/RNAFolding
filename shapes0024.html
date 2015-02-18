@@ -183,6 +183,7 @@ function update(displayData, displayClass, displayCoords)  {
             .style("stroke", "gray")
             .style("stroke-width", 0);});};
         // click to scroll through options
+<<<<<<< Updated upstream
         //.on("click", //scroll)
         // ? add text to each dot 
         // ? add lines directly to dots or like text below
@@ -265,6 +266,11 @@ activeData22 = update(activeData22, "active", activeCoords22);// draws circle of
 
 //update(nullDataBG, "null", nullCoordsBG);// draws null NTs above and SW of bulge and 1 in circle
 //activeDataBG = update(activeDataBG, "active", activeCoordsBG);// draws 4 NTs in circle of 5 NTs for bulge
+=======
+        .on("click", function(){d3.select(this)
+            ;})
+    }
+>>>>>>> Stashed changes
 
 // ----working but bad coords ---- 
 //update(nullData12, "null", nullCoords12);// draws null NTs above and SW of 1-2 loop
