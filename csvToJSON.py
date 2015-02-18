@@ -4,52 +4,37 @@
 import io
 import pprint
 
-#read in 2-2 loop
-# FIRST ROW - comma is field separator
-with open('/Users/sarahguermond/Files/Loop_2_2.csv', 'r') as infile:
+def getValues(fileName):
+	#read in 2-2 loop
+	infile = io.open(fileName, 'r')
+	# get only first line
 	firstLine = infile.readline()
+	lineList = firstLine.strip().split(",")
+	colsToRowsToValues = {}
+	for col in lineList[1:]: #skip the first item because it's just table label
+		if col not in colsToRowsToValues:
+			colsToRowsToValues[col] = {}
+		else:
+			continue
+	# get all the other rows		
+	for line in infile:
+		lineList = line.strip().split(",")
+		row = lineList[0] # row names
+		# get index and value for all keys in loop_2_2 (col names)
+		num = 1
+		for col, value in colsToRowsToValues.iteritems():
+			if row not in colsToRowsToValues[col]:
+				colsToRowsToValues[col][row] = lineList[num]
+			num += 1
+	infile.close()
+	return colsToRowsToValues
 
-lineList = firstLine.strip().split(",")
 
-loop_2_2 = {}
-for string1 in lineList[1:]: #skip the first item because it's just table label
-	if string1 not in loop_2_2:
-		loop_2_2[string1] = {}
-	else:
-		continue
+loop_2_2_test = getValues('/Users/sarahguermond/Files/Loop_2_2.csv')
+#pprint.pprint(loop_2_2)
 
-#print loop_2_2
-
-# ALL OTHER ROWS
-string2ToEnergy = io.open('/Users/sarahguermond/Files/Loop_2_2.csv', 'r')
-#skip first line
-string2ToEnergy.readline()
-for line in string2ToEnergy:
-	lineList = line.strip().split(",")
-	string2 = lineList[0] # row names
-	# get index and value for all keys in loop_2_2 (col names)
-	num = 1
-	for string1, value in loop_2_2.iteritems():
-		if string2 not in loop_2_2[string1]:
-			loop_2_2[string1][string2] = lineList[num]
-			#print num
-		num += 1
-				#print lineList[value]
-				#string1[string2] = {}
-				#string1[string2] = lineList[num]
-				#print type(string1)
-		#else:
-		#	continue
-
-pprint.pprint(loop_2_2)
-#print loop_2_2
-#	for index, string1 in enumerate(loop_2_2):
-#		print index, string1, string2
-		
-		#print loop_2_2[string1[string2]]
-		#loop_2_2[string1[string2]] = lineList[index+1]
-#string2ToEnergy.close()
-
+loop_1_2 = getValues('/Users/sarahguermond/Files/Loop_1_2.csv')
+pprint.pprint(loop_1_2)
 
 # all other rows
 # for string1 in dictionary1:
