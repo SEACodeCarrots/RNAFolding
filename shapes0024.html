@@ -159,7 +159,7 @@ function update(displayData, displayClass, displayCoords)  {
         .enter()
         .append("circle") // add circles
         .attr("class", displayClass + "Circle") // set class so selectAll can find circles
-        .attr("index", function(d, i) {return i})
+        .attr("id", function(d, i) {return displayClass + "Circle" + i;})
         .attr("r", radius)
         .attr("cx", function(d, i) {return displayCoords[i][0] * sizeFactor})
         .attr("cy", function(d, i) {return displayCoords[i][1] * sizeFactor})
@@ -172,7 +172,6 @@ function update(displayData, displayClass, displayCoords)  {
             };
             
         })
-        .append("text").text(function(d, i) {return i});
         // add gray outline on mouseover
     if (displayClass == "active") {
         circles.on("mouseover", function(){d3.select(this)
@@ -184,8 +183,6 @@ function update(displayData, displayClass, displayCoords)  {
             .style("stroke-width", 0);});};
         // click to scroll through options
 <<<<<<< Updated upstream
-        //.on("click", //scroll)
-        // ? add text to each dot 
         // ? add lines directly to dots or like text below
 
 // text on circles takes mouseover focus away from circle
@@ -194,7 +191,7 @@ function update(displayData, displayClass, displayCoords)  {
         .data(displayData)
         .enter()
         .append("text") // add empty text elements
-        .attr("class", displayClass + "Text") // set class so selectAll can find text elements 
+        .attr("class", displayClass + "Text")// set class so selectAll can find text elements
         .text(function(d) {return d}) // add text from
         .attr("x", function(d, i) {return displayCoords[i][0] * sizeFactor}) // position
         .attr("y", function(d, i) {return displayCoords[i][1] * sizeFactor + textHeight / 2.5})
@@ -219,22 +216,18 @@ function update(displayData, displayClass, displayCoords)  {
             for (j = 0; j < nucleoArray.length; j++) {
                 if (nucleoArray[j].key == d) {
                     clickedText.data(nucleoArray[(j + 1) % (nucleoArray.length - 1)].key)
-                      //  .style("fill", nucleoArray[(j + 1) % (nucleoArray.length - 1)].values[1])
                         .text(function(d, k) {  // update text to new d
                             displayData[i] = d;  // update displayData to new d
-                            var circleSet = d3.selectAll("." + displayClass + "Circle")
-                                .style("fill", function(e, l) {if (l == i) {
+                            var circleI = d3.select("#" + displayClass + "Circle" + i)
+                                .style("fill", function(e, l) {
                                     var m = 0;
                                     for (var m = 0; m < nucleoArray.length; m++) {
                                         if (nucleoArray[m].key == d) {
-
                                             return nucleoArray[m].values[1];
-                                        }
-                                       
-                                     }; 
-                                };});
-
-
+                                        };
+                                    };
+                                        
+                                });
                             return d;
                         });
 
