@@ -24,6 +24,7 @@ var width = window.innerWidth,
     nullData11 = ["X", "X", "X", "X"],
 
     nullCoords11 = [
+ //       cx    cy
         [-80, -300],
         [80,  -300],
         [-80,  300],
@@ -33,6 +34,7 @@ var width = window.innerWidth,
     activeData11 = ["A", "U", "R", "G", "C", "Y"], 
 
     activeCoords11 = [
+ //       cx    cy
         [ -80, -140], // col 1
         [  80, -140], // col 2
         [-150,    0], // table 1
@@ -45,6 +47,7 @@ var width = window.innerWidth,
     nullData22 = ["X", "X", "X", "X"],
 
     nullCoords22 = [
+ //       cx    cy
         [-80, -350],
         [ 80, -350],
         [-80,  350],
@@ -54,21 +57,24 @@ var width = window.innerWidth,
     activeData22 = ["A", "U", "R", "G", "C", "Y", "A", "N"], 
 
     activeCoords22 = [
-        [ -80, -190],
-        [  80, -190],
-        [-190,  -80],
-        [ 190,  -80],
-        [-190,   80],
-        [ 190,   80],
-        [ -80,  190],
-        [  80,  190]
+ //       cx    cy
+        [ -80, -190], // col 1
+        [  80, -190], // col 2
+        [-190,  -80], // row 1 
+        [ 190,  -80], // row 2
+        [-190,   80], // row 3
+        [ 190,   80], // row 4
+        [ -80,  190], // col 3
+        [  80,  190]  // col 4
     ], 
-// hairpin needs work --- menu for # of bases and extras for 4 NT hairpins to
-// access 6 relevant nts rather than 4
+
 // data and coords for hairpin
+
+
     nullDataHP = ["X", "X"],
 
     nullCoordsHP = [
+ //       cx    cy
         [-80, -220],
         [ 80, -220]
     ],
@@ -76,12 +82,13 @@ var width = window.innerWidth,
     activeDataHP = ["A", "U", "R", "G", "C", "Y"], 
 
     activeCoordsHP = [
-        [ -80, -60],
-        [  80, -60],
-        [-150,  80],
-        [ 150,  80],
-        [ -80, 220],
-        [  80, 220]
+ //       cx    cy
+        [ -80, -60], // 1st nt
+        [  80, -60], // 6th nt
+        [-150,  80], // 2nd nt    
+        [ 150,  80], // 5th nt
+        [ -80, 220], // 3rd nt
+        [  80, 220]  // 4th nt
     ],
 
 // data and coords for bulge -- needs bulge size menu of one to six nts -- 
@@ -89,9 +96,10 @@ var width = window.innerWidth,
     nullDataBG = ["X", "X", "X", "X", "X"],
 
     nullCoordsBG = [
+ //       cx    cy
         [-80, -190],
         [ 80, -190],
-        [135,   85],
+        [135,   85], // ?use i = 3 to scroll # of nts
         [-80,  350],
         [ 80,  350]
     ],
@@ -99,10 +107,11 @@ var width = window.innerWidth,
     activeDataBG = ["A", "U", "R", "G",], 
 
     activeCoordsBG = [
-        [ -80,  -60],
-        [  80,  -60],
-        [ -135,  85],
-        [    0, 190]
+ //       cx    cy
+        [ -80,  -60], //col 1
+        [  80,  -60], //col 2
+        [ -135,  85], //row 1
+        [    0, 190]  //row 2
     ],
 
 // data and coords for 1-2 loops 
@@ -110,6 +119,7 @@ var width = window.innerWidth,
     nullData12 = ["X", "X", "X", "X"],
 
     nullCoords12 = [
+ //       cx    cy
         [-80, -350],
         [ 80, -350],
         [-80,  350],
@@ -119,6 +129,7 @@ var width = window.innerWidth,
     activeData12 = ["A", "U", "R", "G", "Y", "C", "N"], 
 
     activeCoords12 = [
+ //       cx    cy
         [ -80,  -60],
         [  80,  -60],
         [ 135,   85],
@@ -128,21 +139,24 @@ var width = window.innerWidth,
         [   0,  190]
     ];
 
-// select the html body, add svg element to body, add group element to svg
+// select the html body, add svg element to body, add group element 
+// to svg. circles and text are contained in thegroup element
 var svg = d3.select("body")
-	.append("svg")
-    	.attr("width", width)
-    	.attr("height", height)
-	.append("g")
+    .append("svg")
+        .attr("width", width)
+        .attr("height", height)
+    .append("g")
 
-// put origin in center of window
-    	.attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+// move origin to center of window
+        .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
 // pass in array of nts, class text subpart, and 2D array of coords
-// display them as dots per coordinates
+// display nts as dots per coordinates
 function update(displayData, displayClass, displayCoords)  {
-// change to use structure with
+
+// change to use structure with variable as key 
     var nucleoArray = [
+    //         nt              name        color
         {key: "A", values: ["Adenine",    "yellow"]}, 
         {key: "U", values: ["Uracil",     "blue"]}, 
         {key: "G", values: ["Guanine",    "red"]}, 
@@ -154,12 +168,14 @@ function update(displayData, displayClass, displayCoords)  {
     ];
   
     // draw a dot for each value in displayData per coords in displayData
-    var circles = svg.selectAll("." + displayClass + "Circle")// select all potential display circles
-        .data(displayData) // attach displayData
-        .enter()
+    // select all circles of current display class
+    var circles = svg.selectAll("." + displayClass + "Circle")
+        .data(displayData) // attach displayData to selected circles
+        .enter() // create an enter subsection
         .append("circle") // add circles
         .attr("class", displayClass + "Circle") // set class so selectAll can find circles
-        .attr("id", function(d, i) {return displayClass + "Circle" + i;})
+        // add ids by index so single dots can be selected
+        .attr("id", function(d, i) {return displayClass + "Circle" + i;}) 
         .attr("r", radius)
         .attr("cx", function(d, i) {return displayCoords[i][0] * sizeFactor})
         .attr("cy", function(d, i) {return displayCoords[i][1] * sizeFactor})
@@ -172,9 +188,10 @@ function update(displayData, displayClass, displayCoords)  {
             };
             
         })
-        // add gray outline on mouseover
+    
     if (displayClass == "active") {
-        circles.on("mouseover", function(){d3.select(this)
+        // add gray outline on mouseover
+        circles.on("mouseover", function(){d3.select(this)    // add gray outline on mouseover
             .style("stroke", "gray")
             .style("stroke-width", 4);})
         // remove gray outline when not mouseover
@@ -197,10 +214,10 @@ function update(displayData, displayClass, displayCoords)  {
         .attr("y", function(d, i) {return displayCoords[i][1] * sizeFactor + textHeight / 2.5})
         .attr("text-anchor", "middle")
         .style("font-size", textHeight + "px"); // size 
+
 // shows how text takes focus of mouseover from dots
-// ? change select this to select corresponding dot
-        // add gray outline on mouseover
     if (displayClass == "active") {  // only allow active nts to respond to mouse
+                // add gray outline on mouseover
         text.on("mouseover", function(){d3.select(this)
             .style("stroke", "gray")
             .style("stroke-width", 4);})
