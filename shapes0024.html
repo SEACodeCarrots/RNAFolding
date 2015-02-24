@@ -35,11 +35,11 @@ var width = window.innerWidth,
 
     activeCoords11 = [
  //       cx    cy
-        [ -80, -140], // col 1
-        [  80, -140], // col 2
-        [-150,    0], // table 1
-        [ 150,    0], // table 2
-        [ -80,  140], // row 1
+        [ -80, -140], // col 1         x  x
+        [  80, -140], // col 2        c1  c2
+        [-150,    0], // table 1    t1      t2
+        [ 150,    0], // table 2      r1  r2
+        [ -80,  140], // row 1         x  x
         [  80,  140]  // row 2
     ],
 
@@ -137,17 +137,23 @@ var width = window.innerWidth,
         [ 135,  -85],
         [-135,   85],
         [   0,  190]
-    ];
+    ],
+
+    menuCoords = 
+ //        x     y
+        [ -80,  -60]
+
+;
 
 // select the html body, add svg element to body, add group element 
-// to svg. circles and text are contained in thegroup element
+// to svg. circles and text are contained in the group element
 var svg = d3.select("body")
     .append("svg")
         .attr("width", width)
         .attr("height", height)
     .append("g")
 
-// move origin to center of window
+// move origin group element to center of svg
         .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
 // pass in array of nts, class text subpart, and 2D array of coords
@@ -155,6 +161,7 @@ var svg = d3.select("body")
 function update(displayData, displayClass, displayCoords)  {
 
 // change to use structure with variable as key 
+// lookup table for nt names and colors
     var nucleoArray = [
     //         nt              name        color
         {key: "A", values: ["Adenine",    "yellow"]}, 
@@ -170,12 +177,13 @@ function update(displayData, displayClass, displayCoords)  {
     // draw a dot for each value in displayData per coords in displayData
     // select all circles of current display class
     var circles = svg.selectAll("." + displayClass + "Circle")
-        .data(displayData) // attach displayData to selected circles
-        .enter() // create an enter subsection
-        .append("circle") // add circles
+        .data(displayData); // join displayData to selected circles
+
+    circles.enter() // create an enter subsection
+        .append("circle") // add circles as needed
         .attr("class", displayClass + "Circle") // set class so selectAll can find circles
         // add ids by index so single dots can be selected
-        .attr("id", function(d, i) {return displayClass + "Circle" + i;}) 
+        .attr("id", function(d, i) {return displayClass + "Circle" + i;})// id
         .attr("r", radius)
         .attr("cx", function(d, i) {return displayCoords[i][0] * sizeFactor})
         .attr("cy", function(d, i) {return displayCoords[i][1] * sizeFactor})
@@ -187,9 +195,11 @@ function update(displayData, displayClass, displayCoords)  {
                 };
             };
             
-        })
+        });
+
+    circles.exit().remove(); // delete any leftover elements
     
-    if (displayClass == "active") {
+    if (displayClass == "active") { // only allow active nts to respond to mouse
         // add gray outline on mouseover
         circles.on("mouseover", function(){d3.select(this)
             .style("stroke", "gray")
@@ -204,16 +214,21 @@ function update(displayData, displayClass, displayCoords)  {
 
 // text on circles takes mouseover focus away from circle
 // needs fix  -- text mouseovers demonstrate this
-    var text = svg.selectAll("." + displayClass + "Text") // select potential text of displayClass
-        .data(displayData)
-        .enter()
+
+
+    var text = svg.selectAll("." + displayClass + "Text") // select current potential text of displayClass
+        .data(displayData);  // join displayData to selected text
+
+    text.enter() 
         .append("text") // add empty text elements
         .attr("class", displayClass + "Text")// set class so selectAll can find text elements
         .text(function(d) {return d}) // add text from
         .attr("x", function(d, i) {return displayCoords[i][0] * sizeFactor}) // position
-        .attr("y", function(d, i) {return displayCoords[i][1] * sizeFactor + textHeight / 2.5})
+        .attr("y", function(d, i) {return displayCoords[i][1] * sizeFactor + textHeight / 2.8})
         .attr("text-anchor", "middle")
         .style("font-size", textHeight + "px"); // size 
+
+    text.exit().remove(); // delete any leftover elements
 
 // shows how text takes focus of mouseover from dots
     if (displayClass == "active") {  // only allow active nts to respond to mouse
@@ -244,7 +259,7 @@ function update(displayData, displayClass, displayCoords)  {
         });
     };
 
-    //needs a done button for ending function and returning array
+    //needs a done button to submit array
     return displayData;
 
 }
