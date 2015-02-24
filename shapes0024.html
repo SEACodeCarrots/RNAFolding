@@ -72,8 +72,6 @@ var width = window.innerWidth,
     ], 
 
 // data and coords for hairpin
-
-
     nullDataHP = ["X", "X"],
 
     nullCoordsHP = [
@@ -181,20 +179,18 @@ structureText.enter()
     .attr("x", structMenuCoords[0])
     .attr("y", structMenuCoords[1])
     .attr("text-anchor", "middle")
-    .style("font-size", textHeight + "px") // size 
-;
+    .style("font-size", textHeight + "px") // size
+    .on("click", function(d, i) {
+        for (var j = 0; j < structMenuItems.length; j++) {
+            if (structMenuItems[j] == d) {
+                var newText = structMenuItems[(j + 1) % (structMenuItems.length)];
+                structMenuValue[0] = newText;
+                d3.select(this) //select text that user clicked
+                    .data([newText]) // update data to new text
+                    .text(newText);  // update text to new text
 
-structureText.on("click", function(d, i) {
-    for (var j = 0; j < Things.length; j++) {
-        if (structMenuItems[j] == d) {
-            var newText = structMenuItems[(j + 1) % (structMenuItems.length)];
-            structMenuValue[0] = newText;
-            d3.select(this) //select text that user clicked
-                .data(newText) // update data to new text
-                .text(newText);  // update text to new text
-
+            };
         };
-    };
 });
 
 
