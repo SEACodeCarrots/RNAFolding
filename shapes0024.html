@@ -19,7 +19,7 @@ var width = window.innerWidth,
     sizeFactor = smallDim / 900,
 // needs background and menus 
     menuHeight = radius * 2,
-    menuWidth = radius * 12,
+    menuWidth = radius * 6,
 
 
 // ? separate data to 2nd file
@@ -142,7 +142,7 @@ var width = window.innerWidth,
         [   0,  190]
     ],
 
-    structMenuInit = ["Bulge"],
+    structMenuValue = ["Bulge"],
 
     structMenuItems = ["Bulge", "Hairpin", "1-1 Loop", "1-2 Loop", "2-2 Loop"],
  //                       x    y
@@ -156,22 +156,49 @@ var width = window.innerWidth,
         .attr("height", height)
     .append("g")
 // move origin of group element to center of svg
-        .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")"),
+        .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
         // how did rect get outside body
-        structMenu = svg.select(".stuctMenuRect")
-        .data(structMenuInit);
+var structureMenu = svg.selectAll(".stuctMenuRect")
+        .data(structMenuValue);
 
-    structMenu.enter()
-        .append("rect")
-        .attr("class", "stuctMenuRect")
-        .attr("x", structMenuCoords[0])
-        .attr("y", structMenuCoords[1])
-        .attr("width", "menuWidth")
-        .attr("height", "menuHeight")
-        .style("fill", "blue");
+structureMenu.enter()
+    .append("rect")
+    .attr("class", "stuctMenuRect")
+    .attr("x", structMenuCoords[0])
+    .attr("y", structMenuCoords[1])
+    .attr("width", menuWidth)
+    .attr("height", menuHeight)
+    .style("fill", "blue");
+
+var structureText = svg.selectAll(".structText")
+    .data(structMenuValue);
+
+structureText.enter()
+    .append("text")
+    .attr("class", "structText")
+    .text(function(d) {return d})
+    .attr("x", structMenuCoords[0])
+    .attr("y", structMenuCoords[1])
+    .attr("text-anchor", "middle")
+    .style("font-size", textHeight + "px") // size 
+;
+
+structureText.on("click", function(d, i) {
+    for (var j = 0; j < Things.length; j++) {
+        if (structMenuItems[j] == d) {
+            var newText = structMenuItems[(j + 1) % (structMenuItems.length)];
+            structMenuValue[0] = newText;
+            d3.select(this) //select text that user clicked
+                .data(newText) // update data to new text
+                .text(newText);  // update text to new text
+
+        };
+    };
+});
 
 
+structureText.exit().remove();
 
 
 
@@ -234,8 +261,7 @@ function update(displayData, displayClass, displayCoords)  {
 // text on circles takes mouseover focus away from circle
 // needs fix  -- text mouseovers demonstrate this
 
-
-    var text = svg.selectAll("." + displayClass + "Text") // select current potential text of displayClass
+var text = svg.selectAll("." + displayClass + "Text") // select current potential text of displayClass
         .data(displayData);  // join displayData to selected text
 
     text.enter() 
@@ -261,14 +287,14 @@ function update(displayData, displayClass, displayCoords)  {
             .style("stroke-width", 0);})
         // on click
         .on("click", function(d, i) {
-            var j = 0,
-                clickedText = d3.select(this); //select text that user clicked
+            var j = 0;
             // cycle thru nucleoArray by j, match key to d and get new key and fill value
             for (j = 0; j < nucleoArray.length; j++) {
                 if (nucleoArray[j].key == d) {
                     var newKey = nucleoArray[(j + 1) % (nucleoArray.length - 1)].key;
                     var newFill = nucleoArray[(j + 1) % (nucleoArray.length - 1)].values[1];
-                    clickedText.data(newKey) // update data to new key
+                    d3.select(this) //select text that user clicked
+                        .data(newKey) // update data to new key
                         .text(newKey);  // update text to new key
                     displayData[i] = newKey;  // update displayData to new key
                     d3.select("#" + displayClass + "Circle" + i) //select circle behind clickedText
