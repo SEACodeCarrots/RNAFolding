@@ -188,6 +188,31 @@ structureText.enter()
                 d3.select(this) //select text that user clicked
                     .data([newText]) // update data to new text
                     .text(newText);  // update text to new text
+                switch(newText) {
+                    case structMenuItems[0]:
+update(nullDataBG, "null", nullCoordsBG);// draws null NTs above and SW of bulge and 1 in circle
+activeDataBG = update(activeDataBG, "active", activeCoordsBG);// draws 4 NTs in circle of 5 NTs for bulge
+                        break;
+                    case structMenuItems[1]:  
+update(nullDataHP, "null", nullCoordsHP);      // draws null NTs above hairpin
+activeDataHP = update(activeDataHP, "active", activeCoordsHP);// draws circle of 6 NTs for hairpin
+                        break;
+                    case structMenuItems[2]:
+update(nullData11, "null", nullCoords11);      // draws null NTs above and below 1-1 loop
+activeData11 = update(activeData11, "active", activeCoords11);// draws circle of 6 NTs for 1-1 loop
+                        break;
+                    case structMenuItems[3]:
+update(nullData12, "null", nullCoords12);// draws null NTs above and SW of 1-2 loop
+activeData12 = update(activeData12, "active", activeCoords12);// draws 7 NTs in circle for 1-2 loop
+                        break;
+                    case structMenuItems[4]:
+update(nullData22, "null", nullCoords22);      // draws null NTs above and below 2-2 loop
+activeData22 = update(activeData22, "active", activeCoords22);// draws circle of 8 NTs for 2-2 loop
+                        break;
+
+
+                    default:
+                };
 
             };
         };
@@ -222,8 +247,9 @@ function update(displayData, displayClass, displayCoords)  {
         .data(displayData); // join displayData to selected circles
 
     circles.enter() // create an enter subsection
-        .append("circle") // add circles as needed
-        .attr("class", displayClass + "Circle") // set class so selectAll can find circles
+        .append("circle"); // add circles as needed
+        
+    circles.attr("class", displayClass + "Circle") // set class so selectAll can find circles
         // add ids by index so single dots can be selected
         .attr("id", function(d, i) {return displayClass + "Circle" + i;})// id
         .attr("r", radius)
@@ -261,8 +287,9 @@ var text = svg.selectAll("." + displayClass + "Text") // select current potentia
         .data(displayData);  // join displayData to selected text
 
     text.enter() 
-        .append("text") // add empty text elements
-        .attr("class", displayClass + "Text")// set class so selectAll can find text elements
+        .append("text"); // add empty text elements
+
+    text.attr("class", displayClass + "Text")// set class so selectAll can find text elements
         .text(function(d) {return d}) // add text from
         .attr("x", function(d, i) {return displayCoords[i][0] * sizeFactor}) // position
         .attr("y", function(d, i) {return displayCoords[i][1] * sizeFactor + textHeight / 2.8})
@@ -304,6 +331,9 @@ var text = svg.selectAll("." + displayClass + "Text") // select current potentia
     return displayData;
 
 }
+
+
+
 // active data returned from update needs to generate search for lowest energy matching sequence
 // comment out all but one pair
 
