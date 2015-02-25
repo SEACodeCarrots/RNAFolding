@@ -30,7 +30,7 @@ def getValues(fileName):
 	return colsToRowsToValues
 
 
-loop_2_2_test = getValues('/Users/sarahguermond/Files/Loop_2_2.csv')
+loop_2_2 = getValues('/Users/sarahguermond/Files/Loop_2_2.csv')
 loop_1_2 = getValues('/Users/sarahguermond/Files/Loop_1_2.csv')
 bulge_1nt = getValues('/Users/sarahguermond/Files/Bulge_1nt.csv')
 bulge_2nt = getValues('/Users/sarahguermond/Files/Bulge_2nt.csv')
@@ -42,6 +42,8 @@ hairpin = getValues('/Users/sarahguermond/Files/Hairpin.csv')
 loop_1_1_GG = getValues('/Users/sarahguermond/Files/Loop_1_1_GG.csv')
 loop_1_1_UU = getValues('/Users/sarahguermond/Files/Loop_1_1_UU.csv')
 loop_1_1_noboost = getValues('/Users/sarahguermond/Files/Loop_1_1.csv')
+
+pprint.pprint(hairpin)
 
 # TO DO:
 # actually put this stuff into JSON and link to front end
