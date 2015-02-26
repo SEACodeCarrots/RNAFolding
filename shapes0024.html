@@ -61,12 +61,12 @@ var width = window.innerWidth,
     activeCoords22 = [
  //       cx    cy
         [ -80, -190], // col 1
-        [  80, -190], // col 2      x  x
-        [-190,  -80], // row 1     c1  c2
-        [ 190,  -80], // row 2   r1      r2
-        [-190,   80], // row 3   r3      r4
-        [ 190,   80], // row 4     c3  c4
-        [ -80,  190], // col 3      x  x
+        [  80, -190], // col 2        x  x
+        [-190,  -80], // row 1       c1  c2
+        [ 190,  -80], // row 2     r1      r2
+        [-190,   80], // row 3     r3      r4
+        [ 190,   80], // row 4       c3  c4
+        [ -80,  190], // col 3        x  x
         [  80,  190]  // col 4
     ], 
 
@@ -130,13 +130,13 @@ var width = window.innerWidth,
 
     activeCoords12 = [
  //       cx    cy
-        [ -80,  -60],
-        [  80,  -60],
-        [ 135,   85],
-        [   0, -190],
-        [ 135,  -85],
-        [-135,   85],
-        [   0,  190]
+        [ -80,  -60], //  
+        [  80,  -60], //
+        [ 135,   85], //
+        [   0, -190], //
+        [ 135,  -85], //
+        [-135,   85], //
+        [   0,  190]  //
     ],
 
     structMenuValue = ["Bulge", "Submit"],
@@ -152,6 +152,13 @@ var width = window.innerWidth,
         [250,  50]
     ],
 
+    ntSelectBG = ["3nts"],
+
+    ntItemsBG =  ["3nts", "4nts", "5nts", "6nts"],
+
+    ntMenuCoords = [180, 85],
+
+
 // select the html body, add svg element to body, add group element 
 // to svg. circles and text are contained in the group element
     svg = d3.select("body")
@@ -162,28 +169,70 @@ var width = window.innerWidth,
 // move origin of group element to center of svg
         .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
-        // how did rect get outside body
-var structureMenu = svg.selectAll(".stuctMenuRect")
-        .data(structMenuValue);
+    // temporary location for BG nt menu                 ---------------------------------------
+
+var ntMenuRect = svg.selectAll(".ntRect")
+    .data(ntSelectBG);
+
+ntMenuRect.enter()
+    .append("rect")
+    .attr("class", "ntRect")
+    .attr("x", ntMenuCoords[0]) //position rectangle
+    .attr("y", ntMenuCoords[1])
+    .attr("rx", radius / 4) // round corners
+    .attr("ry", radius / 4)
+    .attr("width", menuWidth) // set size
+    .attr("height", menuHeight)
+    .style("fill", "aqua"); // color inside rectangle
+
+ntMenuRect.exit().remove();
+
+var ntMenuText = svg.selectAll(".ntText")
+    .data(ntSelectBG);
+
+ntMenuText.enter()
+    .append("text")
+    .attr("class", "ntText")
+    .text(function(d) {return d}) // put inner text from data into element
+    .attr("x", ntMenuCoords[0] + 3 * radius) //position text
+    .attr("y", ntMenuCoords[1] + radius * 1.4)
+    .attr("text-anchor", "middle")
+    .style("font-size", textHeight + "px")
+    .on("click", function(d, i) {
+        for (var j = 0; j < ntItemsBG.length; j++) {
+            if (ntItemsBG == d) {
+                var newNtValue = ntItemsBG[(j + 1) % ntItemsBG[i].length];
+
+                //finish this            -----------------------------------------------------
+            };
+        };
+    });
+
+ntMenuText.exit().remove();
+
+// create rectangles for menu background
+var structureMenu = svg.selectAll(".stuctMenuRect") // select rects for outer menus
+    .data(structMenuValue);// join structMenuValue to rectangle
 
 structureMenu.enter()
-    .append("rect")
-    .attr("class", "stuctMenuRect")
-    .attr("x", function(d, i) {return structMenuCoords[i][0] })
-    .attr("y", function(d, i) {return structMenuCoords[i][1] })
-    .attr("rx", radius / 4)
+    .append("rect") // create rectangles
+    .attr("class", "stuctMenuRect") // assign class to rectangles so svg.selectAll can find them
+    .attr("x", function(d, i) {return structMenuCoords[i][0]}) //position rectangles
+    .attr("y", function(d, i) {return structMenuCoords[i][1]})
+    .attr("rx", radius / 4) // round corners
     .attr("ry", radius / 4)
-    .attr("width", menuWidth)
+    .attr("width", menuWidth) // set size
     .attr("height", menuHeight)
-    .style("fill", "blue");
+    .style("fill", "aqua"); // color inside rectangle
 
-var structureText = svg.selectAll(".structText")
-    .data(structMenuValue);
+// create text
+var structureText = svg.selectAll(".structText") // select text for outer menus
+    .data(structMenuValue); // join initial selection to menu text
 
-structureText.enter()
-    .append("text")
-    .attr("class", "structText")
-    .text(function(d) {return d})
+structureText.enter() 
+    .append("text") // create text elements
+    .attr("class", "structText") //assign class to text elements so svg.selectAll can find them
+    .text(function(d) {return d}) // put inner text in element
     .attr("x", function(d, i) {return structMenuCoords[i][0] + 3 * radius})
     .attr("y", function(d, i) {return structMenuCoords[i][1] + radius * 1.4})
     .attr("text-anchor", "middle")
@@ -191,9 +240,9 @@ structureText.enter()
     .on("click", function(d, i) {
         for (var j = 0; j < structMenuItems[i].length; j++) {
             if (structMenuItems[i][j] == d) {
-                var newText = structMenuItems[i][(j + 1) % (structMenuItems[i].length)];
+                var newText = structMenuItems[i][(j + 1) % structMenuItems[i].length];
                 structMenuValue[i][0] = newText;
-                d3.select(this) //select text that user clicked
+                d3.select(this) // select text that user clicked
                     .data([newText]) // update data to new text
                     .text(newText);  // update text to new text
                 switch(newText) {
@@ -202,6 +251,7 @@ structureText.enter()
                         update(nullDataBG, "null", nullCoordsBG);
                         // draws 4 NTs in circle of 5 NTs for bulge
                         activeDataBG = update(activeDataBG, "active", activeCoordsBG);
+                        // now add in the number of nts 
                         break;
                     case structMenuItems[0][1]:
                         // draws null NTs above hairpin
@@ -227,18 +277,19 @@ structureText.enter()
                         // draws circle of 8 NTs for 2-2 loop
                         activeData22 = update(activeData22, "active", activeCoords22);
                         break;
+                    case structMenuItems[1][1]:
+                        // send selected nts to query the dictionary                 -----------------------------
+                         break;
+
                     default:
-                        // submit result
+                        // nothing
                 };
 
             };
         };
 });
 
-
 structureText.exit().remove();
-
-
 
 // pass in array of nts, class text subpart, and 2D array of coords
 // display nts as dots per coordinates
@@ -268,14 +319,14 @@ function update(displayData, displayClass, displayCoords)  {
 
     circles.attr("class", displayClass + "Circle") // set class so selectAll can find circles
         // add ids by index so single dots can be selected
-        .attr("id", function(d, i) {return displayClass + "Circle" + i;})// id
-        .attr("r", radius)
-        .attr("cx", function(d, i) {return displayCoords[i][0] * sizeFactor})
-        .attr("cy", function(d, i) {return displayCoords[i][1] * sizeFactor})
-        .attr("fill", function(d, i) {
+        .attr("id", function(d, i) {return displayClass + "Circle" + i;})// id for individual color cycling
+        .attr("r", radius) //set dot size
+        .attr("cx", function(d, i) {return displayCoords[i][0] * sizeFactor}) // position circles
+        .attr("cy", function(d, i) {return displayCoords[i][1] * sizeFactor}) 
+        .attr("fill", function(d, i) { // color inside circles
             var j = 0;
-            for (j = 0; j < nucleoArray.length; j++) {
-                if(nucleoArray[j].key == d) {
+            for (j = 0; j < nucleoArray.length; j++) { // look thru nucleoArray
+                if(nucleoArray[j].key == d) { // find entry for current 
                     return nucleoArray[j].values[1];
                 };
             };
@@ -308,7 +359,7 @@ var text = svg.selectAll("." + displayClass + "Text") // select current potentia
         .text(function(d) {return d}) // add text from
         .attr("x", function(d, i) {return displayCoords[i][0] * sizeFactor}) // position
         .attr("y", function(d, i) {return displayCoords[i][1] * sizeFactor + textHeight / 2.8})
-        .attr("text-anchor", "middle")
+        .attr("text-anchor", "middle") // position text by its middle
         .style("font-size", textHeight + "px"); // size 
 
     text.exit().remove(); // delete any leftover elements
@@ -323,16 +374,16 @@ var text = svg.selectAll("." + displayClass + "Text") // select current potentia
         .on("mouseout", function(){d3.select(this)
             .style("stroke", "gray")
             .style("stroke-width", 0);})
-        // on click
+        // on click display next nucleotide
         .on("click", function(d, i) {
             var j = 0;
             // cycle thru nucleoArray by j, match key to d and get new key and fill value
             for (j = 0; j < nucleoArray.length; j++) {
                 if (nucleoArray[j].key == d) {
-                    var newKey = nucleoArray[(j + 1) % (nucleoArray.length - 1)].key;
-                    var newFill = nucleoArray[(j + 1) % (nucleoArray.length - 1)].values[1];
-                    d3.select(this) //select text that user clicked
-                        .data(newKey) // update data to new key
+                    var newKey = nucleoArray[(j + 1) % (nucleoArray.length - 1)].key; //get next nucleotide
+                    var newFill = nucleoArray[(j + 1) % (nucleoArray.length - 1)].values[1]; // get next color
+                    d3.select(this) //select text for nt that user clicked
+                        .data(newKey) // update data 
                         .text(newKey);  // update text to new key
                     displayData[i] = newKey;  // update displayData to new key
                     d3.select("#" + displayClass + "Circle" + i) //select circle behind clickedText
@@ -349,6 +400,9 @@ var text = svg.selectAll("." + displayClass + "Text") // select current potentia
 
 }
 
+// add initial bulge dots
+
+/*
     // import JSON file
 
     // when data is submitted:
@@ -405,7 +459,7 @@ if (rnaType == "Bulge"){
 
     // function getResult(refTable, colNucArray, rowNucArray)
     // display all matching colNucArray(take into consideration R (AG), Y (CU), N (AUGC)) and value returned
-
+*/
 </script>
 </body>
 </html>
