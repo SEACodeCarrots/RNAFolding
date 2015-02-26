@@ -99,7 +99,7 @@ var width = window.innerWidth,
  //       cx    cy
         [-80, -220],
         [ 80, -220],
-        [135,   85], // ?use i = 3 to scroll # of nts
+        [135,   85],
         [-80,  350],
         [ 80,  350]
     ],
@@ -110,7 +110,7 @@ var width = window.innerWidth,
  //       cx    cy                  
         [ -80,  -60], //col 1        x   x
         [  80,  -60], //col 2       c1  c2             
-        [ -135,  85], //row 1      r1    x ? menu
+        [ -135,  85], //row 1      r1    x 
         [    0, 190]  //row 2     x   r2
     ],                //             x
 
@@ -139,13 +139,13 @@ var width = window.innerWidth,
         [   0,  190]  // col 4       x
     ],
     // pass different structMenuValue variations
-    structMenuValue = ["Bulge", "Submit", "3nts", "OtherNtList"],
+    structMenuValue = ["Bulge", "Submit", "3nts", "1nt"],
 
     structMenuItems = [
         ["Bulge", "Hairpin", "1-1 Loop", "1-2 Loop", "2-2 Loop"],
         ["Submit", "Results"],
-        ["3nts", "4nts", "5nts", "6nts"],
-        ["OtherNtList"]
+        ["3nts", "4nts", "5nts", "6nts", "7nts", "8nts", "9nts"],
+        ["1nt", "2nts", "3nts", "4nts", "5nts", "6nts"]
         ],
 
 
@@ -157,13 +157,6 @@ var width = window.innerWidth,
         [250,  150]
     ],
 
-    ntSelectBG = ["3nts"],
-
-    ntItemsBG =  ["3nts", "4nts", "5nts", "6nts"],
-
-    ntMenuCoords = [270, 50],
-
-
 // select the html body, add svg element to body, add group element 
 // to svg. circles and text are contained in the group element
     svg = d3.select("body")
@@ -174,234 +167,193 @@ var width = window.innerWidth,
 // move origin of group element to center of svg
         .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
-    // temporary location for BG nt menu                 ---------------------------------------
-/*
-var ntMenuRect = svg.selectAll(".ntRect")
-    .data(ntSelectBG);
-
-ntMenuRect.enter()
-    .append("rect")
-    .attr("class", "ntRect")
-    .attr("x", ntMenuCoords[0]) //position rectangle
-    .attr("y", ntMenuCoords[1])
-    .attr("rx", radius / 4) // round corners
-    .attr("ry", radius / 4)
-    .attr("width", menuWidth) // set size
-    .attr("height", menuHeight)
-    .style("fill", "aqua"); // color inside rectangle
-
-ntMenuRect.exit().remove();
-
-var ntMenuText = svg.selectAll(".ntText")
-    .data(ntSelectBG);
-
-ntMenuText.enter()
-    .append("text")
-    .attr("class", "ntText")
-    .text(function(d) {return d}) // put inner text from data into element
-    .attr("x", ntMenuCoords[0] + 3 * radius) //position text
-    .attr("y", ntMenuCoords[1] + radius * 1.4)
-    .attr("text-anchor", "middle")
-    .style("font-size", textHeight + "px")
-    .on("click", function(d, i) {
-        for (var j = 0; j < ntItemsBG.length; j++) {
-            if (ntItemsBG == d) {
-                var newNtValue = ntItemsBG[(j + 1) % ntItemsBG[i].length];
-
-                //finish this            -----------------------------------------------------
-            };
-        };
-    });
-
-ntMenuText.exit().remove();
-*/
 
 // pass in array of nts, class text subpart, and 2D array of coords
 // display nts as dots per coordinates
 function update(displayData, displayClass, displayCoords)  {
-// structure button is stuck, will only change once
-// create rectangles for menu background
-var structureMenu = svg.selectAll(".stuctMenuRect") // select rects for outer menus
-    .data(structMenuValue); // join structMenuValue to rectangle
+    // structure button is stuck, will only change once
+    // create rectangles for menu background
+    var structureMenu = svg.selectAll(".stuctMenuRect") // select rects for outer menus
+        .data(structMenuValue); // join structMenuValue to rectangle
 
-structureMenu.enter()
-    .append("rect") // create rectangles
-    .attr("class", "stuctMenuRect") // assign class to rectangles so svg.selectAll can find them
-    .attr("x", function(d, i) {return structMenuCoords[i][0]}) //position rectangles
-    .attr("y", function(d, i) {return structMenuCoords[i][1]})
-    .attr("rx", radius / 4) // round corners
-    .attr("ry", radius / 4)
-    .attr("width", menuWidth) // set size
-    .attr("height", menuHeight)
-    .style("fill", "aqua"); // color inside rectangle
+    structureMenu.enter()
+        .append("rect") // create rectangles
+        .attr("class", "stuctMenuRect") // assign class to rectangles so svg.selectAll can find them
+        .attr("x", function(d, i) {return structMenuCoords[i][0]}) //position rectangles
+        .attr("y", function(d, i) {return structMenuCoords[i][1]})
+        .attr("rx", radius / 4) // round corners
+        .attr("ry", radius / 4)
+        .attr("width", menuWidth) // set size
+        .attr("height", menuHeight)
+        .style("fill", "aqua"); // color inside rectangle
 
-// create text
-var structureText = svg.selectAll(".structText") // select text for outer menus
-    .data(structMenuValue); // join initial selection to menu text
+    // create text
+    var structureText = svg.selectAll(".structText") // select text for outer menus
+        .data(structMenuValue); // join initial selection to menu text
 
-structureText.enter() 
-    .append("text") // create text elements
-    .attr("class", "structText") //assign class to text elements so svg.selectAll can find them
-    .text(function(d) {return d}) // insert inner text in element into
-    .attr("x", function(d, i) {return structMenuCoords[i][0] + 3 * radius})
-    .attr("y", function(d, i) {return structMenuCoords[i][1] + radius * 1.4})
-    .attr("text-anchor", "middle")
-    .style("font-size", textHeight + "px") // size
-    .on("click", function(d, i) {
-        for (var j = 0; j < structMenuItems[i].length; j++) {
-            if (structMenuItems[i][j] == d) {
-                var newText = structMenuItems[i][(j + 1) % structMenuItems[i].length];
-                structMenuValue[i][0] = newText;
-                d3.select(this) // select text that user clicked
-                    .data([newText]) // update data to new text
-                    .text(newText);  // update text to new text
+    structureText.enter() 
+        .append("text") // create text elements
+        .attr("class", "structText") //assign class to text elements so svg.selectAll can find them
+        .text(function(d) {return d}) // insert inner text in element into
+        .attr("x", function(d, i) {return structMenuCoords[i][0] + 3 * radius})
+        .attr("y", function(d, i) {return structMenuCoords[i][1] + radius * 1.4})
+        .attr("text-anchor", "middle")
+        .style("font-size", textHeight + "px") // size
+        .on("click", function(d, i) {
+            for (var j = 0; j < structMenuItems[i].length; j++) {
+                if (structMenuItems[i][j] == d) {
+                    var newText = structMenuItems[i][(j + 1) % structMenuItems[i].length];
+                    structMenuValue[i][0] = newText;
+                    d3.select(this) // select text that user clicked
+                        .data([newText]) // update data to new text
+                        .text(newText);  // update text to new text
 
-// I think the code from if else statement below goes in the switch
-                switch(newText) {
-                    case structMenuItems[0][0]:
-                        // draw null NTs above and SW of bulge and 1 in circle
-                        update(nullDataBG, "null", nullCoordsBG);
-                        // draw 4 NTs in circle of 5 NTs for bulge
-                        activeDataBG = update(activeDataBG, "active", activeCoordsBG);
-                        // now add in the number of nts 
-                        break;
-                    case structMenuItems[0][1]:
-                        // draw null NTs above hairpin
-                        update(nullDataHP, "null", nullCoordsHP);
-                        //  draw circle of 6 NTs for hairpin
-                        activeDataHP = update(activeDataHP, "active", activeCoordsHP);
-                        break;
-                    case structMenuItems[0][2]:
-                        // draw null NTs above and below 1-1 loop
-                        update(nullData11, "null", nullCoords11);
-                        // draw circle of 6 NTs for 1-1 loop
-                        activeData11 = update(activeData11, "active", activeCoords11);
-                        break;
-                    case structMenuItems[0][3]:
-                        // draw null NTs above and SW of 1-2 loop
-                        update(nullData12, "null", nullCoords12);
-                        // draw 7 NTs in circle for 1-2 loop
-                        activeData12 = update(activeData12, "active", activeCoords12);
-                        break;
-                    case structMenuItems[0][4]:
-                        // draw null NTs above and below 2-2 loop
-                        update(nullData22, "null", nullCoords22);
-                        // draw circle of 8 NTs for 2-2 loop
-                        activeData22 = update(activeData22, "active", activeCoords22);
-                        break;
-                    case structMenuItems[1][1]:
-                        // send selected nts to query the dictionary                 -----------------------------
-                         break;
+    // I think the code from if else statement below goes in the switch
+                    switch(newText) {
+                        case structMenuItems[0][0]:
+                            // draw null NTs above and SW of bulge and 1 in circle
+                            update(nullDataBG, "null", nullCoordsBG);
+                            // draw 4 NTs in circle of 5 NTs for bulge
+                            activeDataBG = update(activeDataBG, "active", activeCoordsBG);
+                            // now add in the number of nts 
+                            break;
+                        case structMenuItems[0][1]:
+                            // draw null NTs above hairpin
+                            update(nullDataHP, "null", nullCoordsHP);
+                            //  draw circle of 6 NTs for hairpin
+                            activeDataHP = update(activeDataHP, "active", activeCoordsHP);
+                            break;
+                        case structMenuItems[0][2]:
+                            // draw null NTs above and below 1-1 loop
+                            update(nullData11, "null", nullCoords11);
+                            // draw circle of 6 NTs for 1-1 loop
+                            activeData11 = update(activeData11, "active", activeCoords11);
+                            break;
+                        case structMenuItems[0][3]:
+                            // draw null NTs above and SW of 1-2 loop
+                            update(nullData12, "null", nullCoords12);
+                            // draw 7 NTs in circle for 1-2 loop
+                            activeData12 = update(activeData12, "active", activeCoords12);
+                            break;
+                        case structMenuItems[0][4]:
+                            // draw null NTs above and below 2-2 loop
+                            update(nullData22, "null", nullCoords22);
+                            // draw circle of 8 NTs for 2-2 loop
+                            activeData22 = update(activeData22, "active", activeCoords22);
+                            break;
+                        case structMenuItems[1][1]:
+                            // send selected nts to query the dictionary                 -----------------------------
+                             break;
 
-                    default:
-                        // nothing
-                };
+                        default:
+                            // nothing
+                    };
 
-            };
-        };
-});
-
-structureText.exit().remove();
-
-// change to use structure with variable name nucleotide
-// lookup table for nt names and colors
-    var nucleoArray = [
-    //         nt              name        color
-        {key: "A", values: ["Adenine",    "yellow"]}, 
-        {key: "U", values: ["Uracil",     "blue"]}, 
-        {key: "G", values: ["Guanine",    "red"]}, 
-        {key: "C", values: ["Cytosine",   "green"]}, 
-        {key: "R", values: ["puRine",     "orange"]}, 
-        {key: "Y", values: ["pYrimidine", "turquoise"]}, 
-        {key: "N", values: ["unkNown",    "silver"]},
-        {key: "X", values: ["X null",     "pink"]}
-    ];
-  
-    // draw a dot for each value in displayData per coords in displayData
-    // select all circles of current display class
-    var circles = svg.selectAll("." + displayClass + "Circle")
-        .data(displayData); // join displayData to selected circles
-
-    circles.enter() // create an enter subsection
-        .append("circle"); // add circles as needed
-
-    circles.attr("class", displayClass + "Circle") // set class so selectAll can find circles
-        // add ids by index so single dots can be selected
-        .attr("id", function(d, i) {return displayClass + "Circle" + i;})// id for individual color cycling
-        .text(function(d) {return d}) // insert text from data into inner html
-        .attr("r", radius) //set dot size
-        .attr("cx", function(d, i) {return displayCoords[i][0] * sizeFactor}) // position circles
-        .attr("cy", function(d, i) {return displayCoords[i][1] * sizeFactor}) 
-        .style("fill", function(d, i) { // color inside circles
-            var j = 0;
-            for (j = 0; j < nucleoArray.length; j++) { // look thru nucleoArray
-                if(nucleoArray[j].key == d) { // find color for current value
-                    return nucleoArray[j].values[1];
                 };
             };
-            
-        });
+    });
 
-    circles.exit().remove(); // delete any leftover elements
-    
-    if (displayClass == "active") { // only allow active nts to respond to mouse
-        // add gray outline on mouseover
-        circles.on("mouseover", function(){d3.select(this)
-            .style("stroke", "gray")
-            .style("stroke-width", 4);})
-        // remove gray outline when not mouseover
-        .on("mouseout", function(){d3.select(this)
-            .style("stroke", "gray")
-            .style("stroke-width", 0);});};
-        // click to scroll through options
+    structureText.exit().remove();
 
-// text on circles takes mouseover focus away from circle
-// needs fix  -- text mouseovers demonstrate this
+    // change to use structure with variable name nucleotide
+    // lookup table for nt names and colors
+        var nucleoArray = [
+        //         nt              name        color
+            {key: "A", values: ["Adenine",    "yellow"]}, 
+            {key: "U", values: ["Uracil",     "blue"]}, 
+            {key: "G", values: ["Guanine",    "red"]}, 
+            {key: "C", values: ["Cytosine",   "green"]}, 
+            {key: "R", values: ["puRine",     "orange"]}, 
+            {key: "Y", values: ["pYrimidine", "turquoise"]}, 
+            {key: "N", values: ["unkNown",    "silver"]},
+            {key: "X", values: ["X null",     "pink"]}
+        ];
+      
+        // draw a dot for each value in displayData per coords in displayData
+        // select all circles of current display class
+        var circles = svg.selectAll("." + displayClass + "Circle")
+            .data(displayData); // join displayData to selected circles
 
-var text = svg.selectAll("." + displayClass + "Text") // select current potential text of displayClass
-        .data(displayData);  // join displayData to selected text
+        circles.enter() // create an enter subsection
+            .append("circle"); // add circles as needed
 
-    text.enter() 
-        .append("text"); // add empty text elements
+        circles.attr("class", displayClass + "Circle") // set class so selectAll can find circles
+            // add ids by index so single dots can be selected
+            .attr("id", function(d, i) {return displayClass + "Circle" + i;})// id for individual color cycling
+            .text(function(d) {return d}) // insert text from data into inner html
+            .attr("r", radius) //set dot size
+            .attr("cx", function(d, i) {return displayCoords[i][0] * sizeFactor}) // position circles
+            .attr("cy", function(d, i) {return displayCoords[i][1] * sizeFactor}) 
+            .style("fill", function(d, i) { // color inside circles
+                var j = 0;
+                for (j = 0; j < nucleoArray.length; j++) { // look thru nucleoArray
+                    if(nucleoArray[j].key == d) { // find color for current value
+                        return nucleoArray[j].values[1];
+                    };
+                };
+                
+            });
 
-    text.attr("class", displayClass + "Text")// set class so selectAll can find text elements
-        .text(function(d) {return d}) // add text from
-        .attr("x", function(d, i) {return displayCoords[i][0] * sizeFactor}) // position
-        .attr("y", function(d, i) {return displayCoords[i][1] * sizeFactor + textHeight / 2.8})
-        .attr("text-anchor", "middle") // position text by its middle
-        .style("font-size", textHeight + "px"); // size 
-
-    text.exit().remove(); // delete any leftover elements
-
-// shows how text takes focus of mouseover from dots
-    if (displayClass == "active") {  // only allow active nts to respond to mouse
-        // add gray outline on mouseover
-        text.on("mouseover", function(){d3.select(this)
-            .style("stroke", "gray")
-            .style("stroke-width", 4);})
+        circles.exit().remove(); // delete any leftover elements
+        
+        if (displayClass == "active") { // only allow active nts to respond to mouse
+            // add gray outline on mouseover
+            circles.on("mouseover", function(){d3.select(this)
+                .style("stroke", "gray")
+                .style("stroke-width", 4);})
             // remove gray outline when not mouseover
             .on("mouseout", function(){d3.select(this)
                 .style("stroke", "gray")
-                .style("stroke-width", 0);})
-            // on click display next nucleotide
-            .on("click", function(d, i) {
-                var j = 0;
-                // cycle thru nucleoArray by j, match key to d and get new key and fill value
-                for (j = 0; j < nucleoArray.length; j++) {
-                    if (nucleoArray[j].key == d) {
-                        var newKey = nucleoArray[(j + 1) % (nucleoArray.length - 1)].key; //get next nucleotide
-                        var newFill = nucleoArray[(j + 1) % (nucleoArray.length - 1)].values[1]; // get next color
-                        d3.select(this) //select text for nt that user clicked
-                            .data(newKey) // update data 
-                            .text(newKey);  // update text to new key
-                        displayData[i] = newKey;  // update displayData to new key
-                        d3.select("#" + displayClass + "Circle" + i) //select circle behind clickedText
-                            .style("fill", newFill);  // and update to new fill
+                .style("stroke-width", 0);});};
+            // click to scroll through options
+
+    // text on circles takes mouseover focus away from circle
+    // needs fix  -- text mouseovers demonstrate this
+
+    var text = svg.selectAll("." + displayClass + "Text") // select current potential text of displayClass
+            .data(displayData);  // join displayData to selected text
+
+        text.enter() 
+            .append("text"); // add empty text elements
+
+        text.attr("class", displayClass + "Text")// set class so selectAll can find text elements
+            .text(function(d) {return d}) // add text from
+            .attr("x", function(d, i) {return displayCoords[i][0] * sizeFactor}) // position
+            .attr("y", function(d, i) {return displayCoords[i][1] * sizeFactor + textHeight / 2.8})
+            .attr("text-anchor", "middle") // position text by its middle
+            .style("font-size", textHeight + "px"); // size 
+
+        text.exit().remove(); // delete any leftover elements
+
+    // shows how text takes focus of mouseover from dots
+        if (displayClass == "active") {  // only allow active nts to respond to mouse
+            // add gray outline on mouseover
+            text.on("mouseover", function(){d3.select(this)
+                .style("stroke", "gray")
+                .style("stroke-width", 4);})
+                // remove gray outline when not mouseover
+                .on("mouseout", function(){d3.select(this)
+                    .style("stroke", "gray")
+                    .style("stroke-width", 0);})
+                // on click display next nucleotide
+                .on("click", function(d, i) {
+                    var j = 0;
+                    // cycle thru nucleoArray by j, match key to d and get new key and fill value
+                    for (j = 0; j < nucleoArray.length; j++) {
+                        if (nucleoArray[j].key == d) {
+                            var newKey = nucleoArray[(j + 1) % (nucleoArray.length - 1)].key; //get next nucleotide
+                            var newFill = nucleoArray[(j + 1) % (nucleoArray.length - 1)].values[1]; // get next color
+                            d3.select(this) //select text for nt that user clicked
+                                .data(newKey) // update data 
+                                .text(newKey);  // update text to new key
+                            displayData[i] = newKey;  // update displayData to new key
+                            d3.select("#" + displayClass + "Circle" + i) //select circle behind clickedText
+                                .style("fill", newFill);  // and update to new fill
+                        };
                     };
-                };
-            });
-    };
-    return displayData;
+                });
+        };
+        return displayData;
 }
 
 // draw null NTs above and SW of bulge and 1 in circle
