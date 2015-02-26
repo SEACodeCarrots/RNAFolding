@@ -104,7 +104,7 @@ var width = window.innerWidth,
         [ 80,  350]
     ],
 
-    activeDataBG = ["A", "A", "A", "A",], 
+    activeDataBG = ["A", "A", "A", "A"], 
 
     activeCoordsBG = [
  //       cx    cy                  
@@ -130,13 +130,13 @@ var width = window.innerWidth,
 
     activeCoords12 = [
  //       cx    cy
-        [ -80,  -60], //  
-        [  80,  -60], //
-        [ 135,   85], //
-        [   0, -190], //
-        [ 135,  -85], //
-        [-135,   85], //
-        [   0,  190]  //
+        [ -80,  -60], // col 1       
+        [  80,  -60], // col 2       x   x
+        [ 135,   85], // row 2      c1   c2
+        [   0, -190], // row 1     r1     r2
+        [ 135,  -85], // row 3     c3    r3
+        [-135,   85], // col 3    x   c4
+        [   0,  190]  // col 4       x
     ],
     // pass different structMenuValue variations
     structMenuValue = ["Bulge", "Submit", "3nts", "OtherNtList"],
@@ -219,7 +219,7 @@ ntMenuText.exit().remove();
 // pass in array of nts, class text subpart, and 2D array of coords
 // display nts as dots per coordinates
 function update(displayData, displayClass, displayCoords)  {
-// sructure button is stuck, will only change once
+// structure button is stuck, will only change once
 // create rectangles for menu background
 var structureMenu = svg.selectAll(".stuctMenuRect") // select rects for outer menus
     .data(structMenuValue); // join structMenuValue to rectangle
@@ -402,7 +402,6 @@ var text = svg.selectAll("." + displayClass + "Text") // select current potentia
             });
     };
     return displayData;
-
 }
 
 // draw null NTs above and SW of bulge and 1 in circle
