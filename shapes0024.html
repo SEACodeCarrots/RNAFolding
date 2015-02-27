@@ -203,7 +203,7 @@ function update(displayData, displayClass, displayCoords)  {
             for (var j = 0; j < structMenuItems[i].length; j++) {
                 if (structMenuItems[i][j] == d) {
                     var newText = structMenuItems[i][(j + 1) % structMenuItems[i].length];
-                    structMenuValue[i][0] = newText;
+                    structMenuValue[i] = newText;
                     d3.select(this) // select text that user clicked
                         .data([newText]) // update data to new text
                         .text(newText);  // update text to new text
