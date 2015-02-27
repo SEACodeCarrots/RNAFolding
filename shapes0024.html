@@ -247,7 +247,10 @@ function update(displayData, displayClass, displayCoords)  {
                                 // when data is submitted:
                                 // get current type of RNA
 
-                        var rnaType = structMenuValue[0];
+                        var rnaType = structMenuValue[0],
+                            colNucs = "",
+                            rowNucs = "",
+                            refTable;
 
 
                             if (rnaType == "Bulge"){
@@ -261,17 +264,17 @@ function update(displayData, displayClass, displayCoords)  {
                                 //################
                                 //################
                                 //################
-                                hairpinType = //I don't understand what the length of the hairpin means here
+                               // hairpinType = //I don't understand what the length of the hairpin means here
                                 //################
                                 //################
                                 //################
                                 // get nucleotides
                                 nucs = activeDataHP;
                                 // are there Ns in it?
-                                colNucs = hairpinType;
+                                //colNucs = hairpinType; // -----------------------------
                                 rowNucs = nucs[0] + nucs[2] + nucs[4] + nucs[5] + nucs[3] + nucs[1];
-                                refTable = hairpin;
-                            } else if (rnaType == "1-1 Loop"){
+                               // refTable = hairpin; //-------------------------------
+                            }/* else if (rnaType == "1-1 Loop"){
                                 // get nucleotides
                                 nucs = activeData11;
                                 colNucs = nucs[0] + nucs[1];
@@ -298,7 +301,7 @@ function update(displayData, displayClass, displayCoords)  {
 
                                 // function getResult(refTable, colNucArray, rowNucArray)
                                 // display all matching colNucArray(take into consideration R (AG), Y (CU), N (AUGC)) and value returned
-
+*/
                              break;
 
                         default:
