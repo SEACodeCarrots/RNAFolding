@@ -365,7 +365,14 @@ function update(displayData, displayClass, displayCoords)  {
                                 refTable = loop_2_2;
                             };
 
-                                // function getResult(refTable, colNucArray, rowNucArray)
+                                function getResult(refFile, colNucArray, rowNucArray){
+                                    result = refFile[colNucArray][rowNucArray];
+                                    // display table with :
+                                    // column   row     energy
+                                    // colNucArray  rowNucArray     result
+                                }
+
+                                getResult(refTable, colNucs, rowNucs);
                                 // display all matching colNucArray(take into consideration R (AG), Y (CU), N (AUGC)) and value returned
 
                              break;
