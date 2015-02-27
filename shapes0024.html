@@ -242,7 +242,63 @@ function update(displayData, displayClass, displayCoords)  {
                             activeData22 = update(activeData22, "active", activeCoords22);
                             break;
                         case structMenuItems[1][1]:
-                            // send selected nts to query the dictionary                 -----------------------------
+                                // import JSON file
+
+                                // when data is submitted:
+                                // get current type of RNA
+
+                        var rnaType = structMenuValue[0];
+
+
+                            if (rnaType == "Bulge"){
+                                // find subset of bulge
+                                // get nucleotides
+                                nucs = activeDataBG;
+                                colNucs = nucs[0] + nucs[1];
+                                rowNucs = nucs[2] + nucs[3];
+                            } else if (rnaType == "Hairpin"){
+                                //get length of hairpin
+                                //################
+                                //################
+                                //################
+                                hairpinType = //I don't understand what the length of the hairpin means here
+                                //################
+                                //################
+                                //################
+                                // get nucleotides
+                                nucs = activeDataHP;
+                                // are there Ns in it?
+                                colNucs = hairpinType;
+                                rowNucs = nucs[0] + nucs[2] + nucs[4] + nucs[5] + nucs[3] + nucs[1];
+                                refTable = hairpin;
+                            } else if (rnaType == "1-1 Loop"){
+                                // get nucleotides
+                                nucs = activeData11;
+                                colNucs = nucs[0] + nucs[1];
+                                rowNucs = nucs[4] + nucs[5];
+                                //find subset of 11 loop
+                                if (nucs[2] == "G" && nucs[3] == "G"){
+                                    refTable = loop_1_1_GG;
+                                } else if (nucs[2] == "A" && nucs[3] == "A"){
+                                    refTable = loop_1_1_noboost;
+                                } else if (nucs[2] == "U" && nucs[3] == "U"){
+                                    refTable = loop_1_1_UU;
+                                };
+                            } else if (rnaType == "1-2 Loop"){
+                                // get nucleotides
+                                nucs = activeData12;
+                                colNucs = // waiting on structure
+                                rowNucs = // waiting on structure
+                            } else if (rnaType == "2-2 Loop"){
+                                // get nucleotides
+                                nucs = activeData22;
+                                colNucs = nucs[0] + nucs[1] + ":" + nucs[6] + nucs[7];
+                                rowNucs = nucs[3] + nucs[4] + "-" + nucs[5] + nucs[6];
+                            };
+
+                                // function getResult(refTable, colNucArray, rowNucArray)
+                                // display all matching colNucArray(take into consideration R (AG), Y (CU), N (AUGC)) and value returned
+
                              break;
 
                         default:
@@ -362,66 +418,6 @@ update(nullDataBG, "null", nullCoordsBG);
 activeDataBG = update(activeDataBG, "active", activeCoordsBG);
 
 
-// add initial bulge dots
-
-/*
-    // import JSON file
-
-    // when data is submitted:
-    // get current type of RNA
-
-rnaType = structMenuValue[0];
-
-
-if (rnaType == "Bulge"){
-    // find subset of bulge
-    // get nucleotides
-    nucs = activeDataBG;
-    colNucs = nucs[0] + nucs[1];
-    rowNucs = nucs[2] + nucs[3];
-} else if (rnaType == "Hairpin"){
-    //get length of hairpin
-    //################
-    //################
-    //################
-    hairpinType = //I don't understand what the length of the hairpin means here
-    //################
-    //################
-    //################
-    // get nucleotides
-    nucs = activeDataHP;
-    // are there Ns in it?
-    colNucs = hairpinType;
-    rowNucs = nucs[0] + nucs[2] + nucs[4] + nucs[5] + nucs[3] + nucs[1];
-    refTable = hairpin;
-} else if (rnaType == "1-1 Loop"){
-    // get nucleotides
-    nucs = activeData11;
-    colNucs = nucs[0] + nucs[1];
-    rowNucs = nucs[4] + nucs[5];
-    //find subset of 11 loop
-    if (nucs[2] == "G" && nucs[3] == "G"){
-        refTable = loop_1_1_GG;
-    } else if (nucs[2] == "A" && nucs[3] == "A"){
-        refTable = loop_1_1_noboost;
-    } else if (nucs[2] == "U" && nucs[3] == "U"){
-        refTable = loop_1_1_UU;
-    };
-} else if (rnaType == "1-2 Loop"){
-    // get nucleotides
-    nucs = activeData12;
-    colNucs = // waiting on structure
-    rowNucs = // waiting on structure
-} else if (rnaType == "2-2 Loop"){
-    // get nucleotides
-    nucs = activeData22;
-    colNucs = nucs[0] + nucs[1] + ":" + nucs[6] + nucs[7];
-    rowNucs = nucs[3] + nucs[4] + "-" + nucs[5] + nucs[6];
-};
-
-    // function getResult(refTable, colNucArray, rowNucArray)
-    // display all matching colNucArray(take into consideration R (AG), Y (CU), N (AUGC)) and value returned
-*/
 </script>
 </body>
 </html>
