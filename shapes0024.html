@@ -208,7 +208,6 @@ function update(displayData, displayClass, displayCoords)  {
                         .data([newText]) // update data to new text
                         .text(newText);  // update text to new text
 
-    // I think the code from if else statement below goes in the switch
                     switch(newText) {
                         case structMenuItems[0][0]:
                             // draw null NTs above and SW of bulge and 1 in circle
@@ -274,25 +273,25 @@ function update(displayData, displayClass, displayCoords)  {
                                 //colNucs = hairpinType; // -----------------------------
                                 rowNucs = nucs[0] + nucs[2] + nucs[4] + nucs[5] + nucs[3] + nucs[1];
                                // refTable = hairpin; //-------------------------------
-                            }/* else if (rnaType == "1-1 Loop"){
+                            } else if (rnaType == "1-1 Loop"){
                                 // get nucleotides
                                 nucs = activeData11;
                                 colNucs = nucs[0] + nucs[1];
                                 rowNucs = nucs[4] + nucs[5];
                                 //find subset of 11 loop
                                 if (nucs[2] == "G" && nucs[3] == "G"){
-                                    refTable = loop_1_1_GG;
+                                   // refTable = loop_1_1_GG; //---------------------------------
                                 } else if (nucs[2] == "A" && nucs[3] == "A"){
-                                    refTable = loop_1_1_noboost;
+                                  // refTable = loop_1_1_noboost; //------------------
                                 } else if (nucs[2] == "U" && nucs[3] == "U"){
-                                    refTable = loop_1_1_UU;
+                                   // refTable = loop_1_1_UU; //------------------------
                                 };
                             } else if (rnaType == "1-2 Loop"){
                                 // get nucleotides
                                 nucs = activeData12;
-                                colNucs = // waiting on structure
-                                rowNucs = // waiting on structure
-                            } else if (rnaType == "2-2 Loop"){
+                               // colNucs = // waiting on structure //---------------------
+                               //rowNucs = // waiting on structure
+                            } else if (rnaType == "2-2 Loop"){ 
                                 // get nucleotides
                                 nucs = activeData22;
                                 colNucs = nucs[0] + nucs[1] + ":" + nucs[6] + nucs[7];
@@ -301,7 +300,7 @@ function update(displayData, displayClass, displayCoords)  {
 
                                 // function getResult(refTable, colNucArray, rowNucArray)
                                 // display all matching colNucArray(take into consideration R (AG), Y (CU), N (AUGC)) and value returned
-*/
+
                              break;
 
                         default:
