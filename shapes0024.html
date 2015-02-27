@@ -241,15 +241,75 @@ function update(displayData, displayClass, displayCoords)  {
                             activeData22 = update(activeData22, "active", activeCoords22);
                             break;
                         case structMenuItems[1][1]:
-                                // import JSON file
+                            // import JSON file
+                            var loop_2_2={};
+                            $.getJSON('loop_2_2.json', function(data) { 
+                            loop_2_2 = data;
+                            }); 
+
+                            var loop_1_2={};
+                            $.getJSON('loop_1_2.json', function(data) { 
+                            loop_1_2 = data;
+                            }); 
+
+                            var bulge_1nt={};
+                            $.getJSON('bulge_1nt.json', function(data) { 
+                            bulge_1nt = data;
+                            }); 
+
+                            var bulge_2nt={};
+                            $.getJSON('bulge_2nt.json', function(data) { 
+                            bulge_2nt = data;
+                            }); 
+
+                            var bulge_3nt={};
+                            $.getJSON('bulge_3nt.json', function(data) { 
+                            bulge_3nt = data;
+                            }); 
+
+                            var bulge_4nt={};
+                            $.getJSON('bulge_4nt.json', function(data) { 
+                            bulge_4nt = data;
+                            }); 
+
+                            var bulge_5nt={};
+                            $.getJSON('bulge_5nt.json', function(data) { 
+                            bulge_5nt = data;
+                            }); 
+
+                            var bulge_6nt={};
+                            $.getJSON('bulge_6nt.json', function(data) { 
+                            bulge_6nt = data;
+                            }); 
+
+                            var hairpin={};
+                            $.getJSON('hairpin.json', function(data) { 
+                            hairpin = data;
+                            }); 
+
+                            var loop_1_1_GG={};
+                            $.getJSON('loop_1_1_GG.json', function(data) { 
+                            loop_1_1_GG = data;
+                            }); 
+
+                            var loop_1_1_UU={};
+                            $.getJSON('loop_1_1_UU.json', function(data) { 
+                            loop_1_1_UU = data;
+                            }); 
+
+                            var loop_1_1_noboost={};
+                            $.getJSON('loop_1_1_noboost.json', function(data) { 
+                            loop_1_1_noboost = data;
+                            }); 
+                                
 
                                 // when data is submitted:
                                 // get current type of RNA
 
-                        var rnaType = structMenuValue[0],
-                            colNucs = "",
-                            rowNucs = "",
-                            refTable;
+                            var rnaType = structMenuValue[0],
+                                colNucs = "",
+                                rowNucs = "",
+                                refTable;
 
 
                             if (rnaType == "Bulge"){
