@@ -173,6 +173,22 @@ var width = window.innerWidth,
 function update(displayData, displayClass, displayCoords)  {
     // structure button is stuck, will only change once
     // create rectangles for menu background
+
+/*
+    var TempResultArray = [
+        ["", "", 2.5],
+        ["", "", 1.8],
+        ["", "", 2.7]
+        ],
+//remember to set results to monospace
+
+
+    resultText = d3.selectAll(".resultTextCl")
+        .data(TempResultArray)
+    ;
+        
+//*/
+
     var structureMenu = svg.selectAll(".stuctMenuRect") // select rects for outer menus
         .data(structMenuValue); // join structMenuValue to rectangle
 
