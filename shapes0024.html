@@ -484,47 +484,7 @@ function update(displayData, displayClass, displayCoords)  {
                         };
                     };
                 });
-
-            // make clear dots to click on
-            topCircles = svg.selectAll(".topCirc")
-                .data(displayData);
-
-            topCircles.enter()
-                .append("circle");
-
-            topCircles.attr("class", "topCirc")
-                .attr("id", function(d, i) {return "topCirc" + i})
-                .attr("cx", function(d, i) {return d3.select("#" + displayClass + "Circle" + i).attr("cx")})
-                .attr("cy", function(d, i) {return d3.select("#" + displayClass + "Circle" + i).attr("cy")})
-                .attr("r", radius)
-                .style("fill", "rgba(0, 0, 0, 0)") // fill dot with transparent black
-                .on("mouseover", function(){d3.select(this)
-                .style("stroke", "gray")
-                .style("stroke-width", 4);})
-                // remove gray outline when not mouseover
-                .on("mouseout", function(){d3.select(this)
-                    .style("stroke", "gray")
-                    .style("stroke-width", 0);})
-                // on click display next nucleotide
-                .on("click", function(d, i) {
-                    var j = 0;
-                    // cycle thru nucleoArray by j, match key to d and get new key and fill value
-                    for (j = 0; j < nucleoArray.length; j++) {
-                        if (nucleoArray[j].key == d) {
-                            var newKey = nucleoArray[(j + 1) % (nucleoArray.length - 1)].key; //get next nucleotide
-                            var newFill = nucleoArray[(j + 1) % (nucleoArray.length - 1)].values[1]; // get next color
-                            d3.select(this) //select text for nt that user clicked
-                                .data(newKey) // update data 
-                                .text(newKey);  // update text to new key
-                            displayData[i] = newKey;  // update displayData to new key
-                            d3.select("#" + displayClass + "Circle" + i) //select circle behind clickedText
-                                .style("fill", newFill);  // and update to new fill
-                        };
-                    };
-                });
         };
-
-
         return displayData;
 }
 
