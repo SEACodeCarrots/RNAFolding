@@ -174,21 +174,6 @@ function update(displayData, displayClass, displayCoords)  {
     // structure button is stuck, will only change once
     // create rectangles for menu background
 
-/*
-    var TempResultArray = [
-        ["", "", 2.5],
-        ["", "", 1.8],
-        ["", "", 2.7]
-        ],
-//remember to set results to monospace
-
-
-    resultText = d3.selectAll(".resultTextCl")
-        .data(TempResultArray)
-    ;
-        
-//*/
-
     var structureMenu = svg.selectAll(".stuctMenuRect") // select rects for outer menus
         .data(structMenuValue); // join structMenuValue to rectangle
 
@@ -202,6 +187,25 @@ function update(displayData, displayClass, displayCoords)  {
         .attr("width", menuWidth) // set size
         .attr("height", menuHeight)
         .style("fill", "aqua"); // color inside rectangle
+
+//temporary location
+
+                                    var headingValues = ["column", "row", "energy"]
+
+                                    var headingText = svg.selectAll(".headingText")
+                                        .data(headingValues);
+
+                                    headingText.enter()
+                                        .append("text");
+
+                                    headingText.attr("class", "headingText")
+                                        .attr("x", function(d, i) {return 0 + i * 30;})
+                                        .attr("y", -0)
+                                        .text(function(d) {return d;})
+                                        .attr("text-anchor", "middle")
+                                        .style("font-size", textHeight / 2 + "px")
+;
+
 
     // create text
     var structureText = svg.selectAll(".structText") // select text for outer menus
@@ -383,7 +387,23 @@ function update(displayData, displayClass, displayCoords)  {
 
                                 function getResult(refFile, colNucArray, rowNucArray){
                                     result = refFile[colNucArray][rowNucArray];
-                                    // display table with :
+
+
+/*
+
+
+                                    var TempResultArray = [
+                                        ["", "", 2.5],
+                                        ["", "", 1.8],
+                                        ["", "", 2.7]
+                                        ],
+                                //remember to set results to monospace
+                                    resultText = svg.selectAll(".resultTextCl")
+                                        .data(TempResultArray)
+                                    ;
+                                        
+                                //*/
+// display table with :
                                     // column   row     energy
                                     // colNucArray  rowNucArray     result
                                 }
