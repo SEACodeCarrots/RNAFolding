@@ -174,20 +174,6 @@ function update(displayData, displayClass, displayCoords)  {
     // structure button is stuck, will only change once
     // create rectangles for menu background
 
-    var structureMenu = svg.selectAll(".stuctMenuRect") // select rects for outer menus
-        .data(structMenuValue); // join structMenuValue to rectangle
-
-    structureMenu.enter()
-        .append("rect") // create rectangles
-        .attr("class", "stuctMenuRect") // assign class to rectangles so svg.selectAll can find them
-        .attr("x", function(d, i) {return structMenuCoords[i][0]}) //position rectangles
-        .attr("y", function(d, i) {return structMenuCoords[i][1]})
-        .attr("rx", radius / 4) // round corners
-        .attr("ry", radius / 4)
-        .attr("width", menuWidth) // set size
-        .attr("height", menuHeight)
-        .style("fill", "aqua"); // color inside rectangle
-
 //temporary location
 
                                     var headingValues = ["column", "row", "energy"]
@@ -203,9 +189,45 @@ function update(displayData, displayClass, displayCoords)  {
                                         .attr("y", -0)
                                         .text(function(d) {return d;})
                                         .attr("text-anchor", "middle")
-                                        .style("font-size", textHeight / 2 + "px")
-;
+                                        .style("font-size", textHeight / 2 + "px");
 
+                                    var TempResultArray = ["AAAAAA", "4nt", "2.5"];
+/*
+                                    var tempArray = [
+                                        ["abcd", "abcd2", 2.0]
+                                        ["rxkmd", "xyz", 0.7]
+                                        ]
+
+                                    newTempArray = for (var i = 0; i < tempArray.length; i++) {
+                                        tempArray[i].slice(0)
+                                    };
+
+                                    var myVar = svg.selectAll(".myStuff")
+                                        .data(TempResultArray);
+
+                                    myVar.enter("x", function(d, i) {return 0 + i * 30;})
+                                        .append("text");
+
+                                    myVar.attr("class", "myStuff")
+                                        .attr("x", 0)
+                                        .attr("y", function(d, i) {return 25 +i *25})
+                                        .text(function(d) {return d;})
+                                        .attr("text-anchor", "middle")
+                                        .style("font-size", textHeight / 2 + "px");*/
+
+    var structureMenu = svg.selectAll(".stuctMenuRect") // select rects for outer menus
+        .data(structMenuValue); // join structMenuValue to rectangle
+
+    structureMenu.enter()
+        .append("rect") // create rectangles
+        .attr("class", "stuctMenuRect") // assign class to rectangles so svg.selectAll can find them
+        .attr("x", function(d, i) {return structMenuCoords[i][0]}) //position rectangles
+        .attr("y", function(d, i) {return structMenuCoords[i][1]})
+        .attr("rx", radius / 4) // round corners
+        .attr("ry", radius / 4)
+        .attr("width", menuWidth) // set size
+        .attr("height", menuHeight)
+        .style("fill", "aqua"); // color inside rectangle
 
     // create text
     var structureText = svg.selectAll(".structText") // select text for outer menus
@@ -392,11 +414,7 @@ function update(displayData, displayClass, displayCoords)  {
 /*
 
 
-                                    var TempResultArray = [
-                                        ["", "", 2.5],
-                                        ["", "", 1.8],
-                                        ["", "", 2.7]
-                                        ],
+
                                 //remember to set results to monospace
                                     resultText = svg.selectAll(".resultTextCl")
                                         .data(TempResultArray)
