@@ -496,6 +496,7 @@ function update(displayData, displayClass, displayCoords)  {
             .append("text"); // add empty text elements
 
         text.attr("class", displayClass + "Text")// set class so selectAll can find text elements
+            .attr("id", function(d, i) {return "text" + i;})
             .text(function(d) {return d}) // add text from
             .attr("x", function(d, i) {return displayCoords[i][0] * sizeFactor}) // position
             .attr("y", function(d, i) {return displayCoords[i][1] * sizeFactor + textHeight / 2.8})
@@ -560,7 +561,7 @@ function update(displayData, displayClass, displayCoords)  {
                         if (nucleoArray[j].key == d) {
                             var newKey = nucleoArray[(j + 1) % (nucleoArray.length - 1)].key; //get next nucleotide
                             var newFill = nucleoArray[(j + 1) % (nucleoArray.length - 1)].values[1]; // get next color
-                            d3.select(this) //select text for nt that user clicked
+                            d3.select("#text" + i ) //select text for nt that user clicked
                                 .data(newKey) // update data 
                                 .text(newKey);  // update text to new key
                             displayData[i] = newKey;  // update displayData to new key
