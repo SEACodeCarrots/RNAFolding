@@ -418,6 +418,8 @@ function update(displayData, displayClass, displayCoords)  {
     });
 
     structureText.exit().remove();
+
+
     var topRects = svg.selectAll(".topRects") // select topRects for outer menus
         .data(structMenuValue); // join structMenuValue to rectangle
 
@@ -439,7 +441,20 @@ function update(displayData, displayClass, displayCoords)  {
         // remove gray outline when not mouseover
         .on("mouseout", function(){d3.select(this)
             .style("stroke", "gray")
-            .style("stroke-width", 0);});
+            .style("stroke-width", 0);})
+        .on("click", function(d, i) {
+            for (var j = 0; j < structMenuItems[i].length; j++) {
+                if (structMenuItems[i][j] == d) {
+                    var newText = structMenuItems[i][(j + 1) % structMenuItems[i].length];
+                    structMenuValue[i] = newText;
+                    d3.select("#structText" + i) // select text that user clicked
+                        .data([newText]) // update data to new text
+                        .text(newText);  // update text to new text
+                };
+            };
+        })
+
+        ;
 
     // change to use structure with variable name nucleotide
     // lookup table for nt names and colors
