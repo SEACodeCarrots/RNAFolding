@@ -167,41 +167,7 @@ var width = window.innerWidth,
 // move origin of group element to center of svg
         .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
-
-// pass in array of nts, class text subpart, and 2D array of coords
-// display nts as dots per coordinates
-function update(displayData, displayClass, displayCoords)  {
-    // structure button is stuck, will only change once
-    // create rectangles for menu background
-
-//temporary location
-
-                                    var headingValues = ["column", "row", "energy"]
-
-                                    var headingText = svg.selectAll(".headingText")
-                                        .data(headingValues);
-
-                                    headingText.enter()
-                                        .append("text");
-
-                                    headingText.attr("class", "headingText")
-                                        .attr("x", function(d, i) {return 0 + i * 30;})
-                                        .attr("y", -0)
-                                        .text(function(d) {return d;})
-                                        .attr("text-anchor", "middle")
-                                        .style("font-size", textHeight / 2 + "px");
-
-                                    var TempResultArray = ["AAAAAA", "4nt", "2.5"];
-/*
-                                    var tempArray = [
-                                        ["abcd", "abcd2", 2.0]
-                                        ["rxkmd", "xyz", 0.7]
-                                        ]
-
-                                    newTempArray = for (var i = 0; i < tempArray.length; i++) {
-                                        tempArray[i].slice(0)
-                                    };
-
+ /*
                                     var myVar = svg.selectAll(".myStuff")
                                         .data(TempResultArray);
 
@@ -214,6 +180,15 @@ function update(displayData, displayClass, displayCoords)  {
                                         .text(function(d) {return d;})
                                         .attr("text-anchor", "middle")
                                         .style("font-size", textHeight / 2 + "px");*/
+
+
+// pass in array of nts, class text subpart, and 2D array of coords
+// display nts as dots per coordinates
+function update(displayData, displayClass, displayCoords)  {
+    // structure button is stuck, will only change once
+    // create rectangles for menu background
+
+
 
     var structureMenu = svg.selectAll(".stuctMenuRect") // select rects for outer menus
         .data(structMenuValue); // join structMenuValue to rectangle
@@ -282,7 +257,7 @@ function update(displayData, displayClass, displayCoords)  {
                             // draw circle of 8 NTs for 2-2 loop
                             activeData22 = update(activeData22, "active", activeCoords22);
                             break;
-                        case structMenuItems[1][1]:
+                        case structMenuItems[1][0]:
                             // import JSON file
                             var loop_2_2={};
                             $.getJSON('loop_2_2.json', function(data) { 
@@ -411,17 +386,38 @@ function update(displayData, displayClass, displayCoords)  {
                                     result = refFile[colNucArray][rowNucArray];
 
 
+                                    var headingValues = ["column", "row", "energy"];
+
+                                    var headingText = svg.selectAll(".headingText")
+                                        .data(headingValues);
+
+                                    headingText.enter()
+                                        .append("text");
+
+                                    headingText.attr("class", "headingText")
+                                        .attr("x", function(d, i) {return 0 + i * 30;})
+                                        .attr("y", -0)
+                                        .text(function(d) {return d;})
+                                        .attr("text-anchor", "middle")
+                                        .style("font-size", textHeight / 2 + "px");
 /*
+                                    var tempArray = [
+                                        ["abcd", "abcd2", 2.0],
+                                        ["rxkmd", "xyz", 0.7]
+                                     ];
+
+                                     var newTempArray = [];
+  
+                                    for (var i = 0; i < tempArray.length; i++) {
+                                        newTempArray[i] = tempArray[i].slice(0, 1)
+                                    };
+
+*/
 
 
+                                    //remember to set results to monospace
 
-                                //remember to set results to monospace
-                                    resultText = svg.selectAll(".resultTextCl")
-                                        .data(TempResultArray)
-                                    ;
-                                        
-                                //*/
-// display table with :
+                                    // display table with :
                                     // column   row     energy
                                     // colNucArray  rowNucArray     result
                                 }
