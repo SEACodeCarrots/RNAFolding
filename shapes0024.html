@@ -192,6 +192,7 @@ function update(displayData, displayClass, displayCoords)  {
     structureText.enter() 
         .append("text") // create text elements
         .attr("class", "structText") //assign class to text elements so svg.selectAll can find them
+        .attr("id", function(d, i) {return "structText" + i;}) // id each element so topRects can find them
         .text(function(d) {return d}) // insert inner text in element into
         .attr("x", function(d, i) {return structMenuCoords[i][0] + 3 * radius})
         .attr("y", function(d, i) {return structMenuCoords[i][1] + radius * 1.4})
@@ -417,7 +418,7 @@ function update(displayData, displayClass, displayCoords)  {
     });
 
     structureText.exit().remove();
-/*    var topRects = svg.selectAll(".topRects") // select topRects for outer menus
+    var topRects = svg.selectAll(".topRects") // select topRects for outer menus
         .data(structMenuValue); // join structMenuValue to rectangle
 
     topRects.enter()
@@ -430,9 +431,15 @@ function update(displayData, displayClass, displayCoords)  {
         .attr("ry", radius / 4)
         .attr("width", menuWidth) // set size
         .attr("height", menuHeight)
-        .style("fill", "rgba(0, 0, 0, 0)"); // fill rect with transparent black
-
-*/
+        .style("fill", "rgba(0, 0, 0, 0)") // fill rect with transparent black
+        // add gray outline on mouseover
+        .on("mouseover", function(){d3.select(this)
+            .style("stroke", "gray")
+            .style("stroke-width", 4);})
+        // remove gray outline when not mouseover
+        .on("mouseout", function(){d3.select(this)
+            .style("stroke", "gray")
+            .style("stroke-width", 0);});
 
     // change to use structure with variable name nucleotide
     // lookup table for nt names and colors
@@ -484,7 +491,6 @@ function update(displayData, displayClass, displayCoords)  {
             .on("mouseout", function(){d3.select(this)
                 .style("stroke", "gray")
                 .style("stroke-width", 0);});};
-            // click to scroll through options
 
     // text on circles takes mouseover focus away from circle
     // needs fix  -- text mouseovers demonstrate this
@@ -565,7 +571,7 @@ function update(displayData, displayClass, displayCoords)  {
                             d3.select("#" + displayClass + "Text" + i) //select text element under clicked disk
                                 .data(newKey) // update text element's data 
                                 .text(newKey); // update text element's inner text
-                            d3.select(this)
+                            d3.select(this) //select clicked topCircle
                                 .data(newKey);
                             displayData[i] = newKey;  // update displayData to new key
                             d3.select("#" + displayClass + "Circle" + i) //select circle behind clickedText
@@ -574,7 +580,7 @@ function update(displayData, displayClass, displayCoords)  {
                     };
                 });
             
-            topCircles.exit().remove();
+            topCircles.exit().remove(); // get rid of any top circles not associated with data members
 
 
         };
