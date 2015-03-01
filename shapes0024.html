@@ -167,28 +167,9 @@ var width = window.innerWidth,
 // move origin of group element to center of svg
         .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
- /*
-                                    var myVar = svg.selectAll(".myStuff")
-                                        .data(TempResultArray);
-
-                                    myVar.enter("x", function(d, i) {return 0 + i * 30;})
-                                        .append("text");
-
-                                    myVar.attr("class", "myStuff")
-                                        .attr("x", 0)
-                                        .attr("y", function(d, i) {return 25 +i *25})
-                                        .text(function(d) {return d;})
-                                        .attr("text-anchor", "middle")
-                                        .style("font-size", textHeight / 2 + "px");*/
-
-
 // pass in array of nts, class text subpart, and 2D array of coords
 // display nts as dots per coordinates
 function update(displayData, displayClass, displayCoords)  {
-    // structure button is stuck, will only change once
-    // create rectangles for menu background
-
-
 
     var structureMenu = svg.selectAll(".stuctMenuRect") // select rects for outer menus
         .data(structMenuValue); // join structMenuValue to rectangle
@@ -436,6 +417,22 @@ function update(displayData, displayClass, displayCoords)  {
     });
 
     structureText.exit().remove();
+
+    var topRects = svg.selectAll(".topRects") // select topRects for outer menus
+        .data(structMenuValue); // join structMenuValue to rectangle
+
+    topRects.enter()
+        .append("rect");
+
+    topRects.attr("class", "topRects") // assign class to rectangles so svg.selectAll can find them
+        .attr("x", function(d, i) {return structMenuCoords[i][0]}) //position rectangles
+        .attr("y", function(d, i) {return structMenuCoords[i][1]})
+        .attr("rx", radius / 4) // round corners
+        .attr("ry", radius / 4)
+        .attr("width", menuWidth) // set size
+        .attr("height", menuHeight)
+        .style("fill", "rgba(0, 0, 0, 0)"); // fill rect with transparent black
+
 
     // change to use structure with variable name nucleotide
     // lookup table for nt names and colors
