@@ -450,6 +450,8 @@ function update(displayData, displayClass, displayCoords)  {
                     d3.select("#structText" + i) // select text that user clicked
                         .data([newText]) // update data to new text
                         .text(newText);  // update text to new text
+                    d3.select(this)
+                        .data([newText]);
                 };
             };
         })
