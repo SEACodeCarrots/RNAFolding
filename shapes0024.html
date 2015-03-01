@@ -198,224 +198,6 @@ function update(displayData, displayClass, displayCoords)  {
         .attr("y", function(d, i) {return structMenuCoords[i][1] + radius * 1.4})
         .attr("text-anchor", "middle")
         .style("font-size", textHeight + "px") // size
-        .on("click", function(d, i) {
-            for (var j = 0; j < structMenuItems[i].length; j++) {
-                if (structMenuItems[i][j] == d) {
-                    var newText = structMenuItems[i][(j + 1) % structMenuItems[i].length];
-                    structMenuValue[i] = newText;
-                    d3.select(this) // select text that user clicked
-                        .data([newText]) // update data to new text
-                        .text(newText);  // update text to new text
-
-                    switch(newText) {
-                        case structMenuItems[0][0]:
-                            // draw null NTs above and SW of bulge and 1 in circle
-                            update(nullDataBG, "null", nullCoordsBG);
-                            // draw 4 NTs in circle of 5 NTs for bulge
-                            activeDataBG = update(activeDataBG, "active", activeCoordsBG);
-                            // now add in the number of nts 
-                            break;
-                        case structMenuItems[0][1]:
-                            // draw null NTs above hairpin
-                            update(nullDataHP, "null", nullCoordsHP);
-                            //  draw circle of 6 NTs for hairpin
-                            activeDataHP = update(activeDataHP, "active", activeCoordsHP);
-                            break;
-                        case structMenuItems[0][2]:
-                            // draw null NTs above and below 1-1 loop
-                            update(nullData11, "null", nullCoords11);
-                            // draw circle of 6 NTs for 1-1 loop
-                            activeData11 = update(activeData11, "active", activeCoords11);
-                            break;
-                        case structMenuItems[0][3]:
-                            // draw null NTs above and SW of 1-2 loop
-                            update(nullData12, "null", nullCoords12);
-                            // draw 7 NTs in circle for 1-2 loop
-                            activeData12 = update(activeData12, "active", activeCoords12);
-                            break;
-                        case structMenuItems[0][4]:
-                            // draw null NTs above and below 2-2 loop
-                            update(nullData22, "null", nullCoords22);
-                            // draw circle of 8 NTs for 2-2 loop
-                            activeData22 = update(activeData22, "active", activeCoords22);
-                            break;
-                        case structMenuItems[1][0]:
-                            // import JSON file
-                            var loop_2_2={};
-                            $.getJSON('loop_2_2.json', function(data) { 
-                            loop_2_2 = data;
-                            }); 
-
-                            var loop_1_2={};
-                            $.getJSON('loop_1_2.json', function(data) { 
-                            loop_1_2 = data;
-                            }); 
-
-                            var bulge_1nt={};
-                            $.getJSON('bulge_1nt.json', function(data) { 
-                            bulge_1nt = data;
-                            }); 
-
-                            var bulge_2nt={};
-                            $.getJSON('bulge_2nt.json', function(data) { 
-                            bulge_2nt = data;
-                            }); 
-
-                            var bulge_3nt={};
-                            $.getJSON('bulge_3nt.json', function(data) { 
-                            bulge_3nt = data;
-                            }); 
-
-                            var bulge_4nt={};
-                            $.getJSON('bulge_4nt.json', function(data) { 
-                            bulge_4nt = data;
-                            }); 
-
-                            var bulge_5nt={};
-                            $.getJSON('bulge_5nt.json', function(data) { 
-                            bulge_5nt = data;
-                            }); 
-
-                            var bulge_6nt={};
-                            $.getJSON('bulge_6nt.json', function(data) { 
-                            bulge_6nt = data;
-                            }); 
-
-                            var hairpin={};
-                            $.getJSON('hairpin.json', function(data) { 
-                            hairpin = data;
-                            }); 
-
-                            var loop_1_1_GG={};
-                            $.getJSON('loop_1_1_GG.json', function(data) { 
-                            loop_1_1_GG = data;
-                            }); 
-
-                            var loop_1_1_UU={};
-                            $.getJSON('loop_1_1_UU.json', function(data) { 
-                            loop_1_1_UU = data;
-                            }); 
-
-                            var loop_1_1_noboost={};
-                            $.getJSON('loop_1_1_noboost.json', function(data) { 
-                            loop_1_1_noboost = data;
-                            }); 
-                                
-                            // when data is submitted:
-                            // get current type of RNA
-
-                            var rnaType = structMenuValue[0],
-                                hairpinType = structMenuValue[1],
-                                bulgeType = structMenuValue[2],
-                                colNucs = "",
-                                rowNucs = "",
-                                refTable;
-
-
-                            if (rnaType == "Bulge"){
-                                // get nucleotides
-                                nucs = activeDataBG;
-                                colNucs = nucs[0] + nucs[1];
-                                rowNucs = nucs[2] + nucs[3];
-                                if (bulgeType == "1nt"){
-                                    refTable = bulge_1nt;
-                                } else if (bulgeType == "2nts"){
-                                    refTable = bulge_2nt;
-                                } else if (bulgeType == "3nts"){
-                                    refTable = bulge_3nt;
-                                } else if (bulgeType == "4nts"){
-                                    refTable = bulge_4nt;
-                                } else if (bulgeType == "5nts"){
-                                    refTable = bulge_5nt;
-                                } else if (bulgeType == "6nts"){
-                                    refTable = bulge_6nt;
-                                }
-                            } else if (rnaType == "Hairpin"){
-                                // get nucleotides
-                                nucs = activeDataHP;
-                                // are there Ns in it? --> deal with that later
-                                colNucs = hairpinType;
-                                rowNucs = nucs[0] + nucs[2] + nucs[4] + nucs[5] + nucs[3] + nucs[1];
-                                refTable = hairpin; 
-                            } else if (rnaType == "1-1 Loop"){
-                                // get nucleotides
-                                nucs = activeData11;
-                                colNucs = nucs[0] + nucs[1];
-                                rowNucs = nucs[4] + nucs[5];
-                                //find subset of 11 loop
-                                if (nucs[2] == "G" && nucs[3] == "G"){
-                                    refTable = loop_1_1_GG; 
-                                } else if (nucs[2] == "A" && nucs[3] == "A"){
-                                    refTable = loop_1_1_noboost; 
-                                } else if (nucs[2] == "U" && nucs[3] == "U"){
-                                    refTable = loop_1_1_UU; 
-                                };
-                            } else if (rnaType == "1-2 Loop"){
-                                // get nucleotides
-                                nucs = activeData12;
-                                colNucs = nucs[0] + nucs[1] + nucs[6] + nucs[7]; 
-                                rowNucs = nucs[2] + nucs[3] + nucs[4] + nucs[5];
-                                refTable = loop_1_2;
-                            } else if (rnaType == "2-2 Loop"){ 
-                                // get nucleotides
-                                nucs = activeData22;
-                                colNucs = nucs[0] + nucs[1] + ":" + nucs[6] + nucs[7];
-                                rowNucs = nucs[3] + nucs[4] + "-" + nucs[5] + nucs[6];
-                                refTable = loop_2_2;
-                            };
-
-                                function getResult(refFile, colNucArray, rowNucArray){
-                                    result = refFile[colNucArray][rowNucArray];
-
-
-                                    var headingValues = ["column", "row", "energy"];
-
-                                    var headingText = svg.selectAll(".headingText")
-                                        .data(headingValues);
-
-                                    headingText.enter()
-                                        .append("text");
-
-                                    headingText.attr("class", "headingText")
-                                        .attr("x", function(d, i) {return 0 + i * 30;})
-                                        .attr("y", -0)
-                                        .text(function(d) {return d;})
-                                        .attr("text-anchor", "middle")
-                                        .style("font-size", textHeight / 2 + "px");
-/*
-                                    var tempArray = [
-                                        ["abcd", "abcd2", 2.0],
-                                        ["rxkmd", "xyz", 0.7]
-                                     ];
-
-                                     var newTempArray = [];
-  
-                                    for (var i = 0; i < tempArray.length; i++) {
-                                        newTempArray[i] = tempArray[i].slice(0, 1)
-                                    };
-
-*/
-
-
-                                    //remember to set results to monospace
-
-                                    // display table with :
-                                    // column   row     energy
-                                    // colNucArray  rowNucArray     result
-                                }
-
-                                getResult(refTable, colNucs, rowNucs);
-                                // display all matching colNucArray(take into consideration R (AG), Y (CU), N (AUGC)) and value returned
-
-                             break;
-
-                        default:
-                            // nothing
-                    };
-
-                };
-            };
-    });
 
     structureText.exit().remove();
 
@@ -452,7 +234,6 @@ function update(displayData, displayClass, displayCoords)  {
                         .text(newText);  // update text to new text
                     d3.select(this)
                         .data([newText]);
-//   ---------------------------------------------------------XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
                     switch(newText) {
                         case structMenuItems[0][0]:
@@ -640,10 +421,7 @@ function update(displayData, displayClass, displayCoords)  {
                                     for (var i = 0; i < tempArray.length; i++) {
                                         newTempArray[i] = tempArray[i].slice(0, 1)
                                     };
-
 */
-
-
                                     //remember to set results to monospace
 
                                     // display table with :
@@ -661,13 +439,9 @@ function update(displayData, displayClass, displayCoords)  {
 
                         };  // end switch statement
 
-
-//--------------------------------------------------------------XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
                 }; // end if statement
             };// end for statement
-        })
-
-        ;
+        });// end on click function
 
     // change to use structure with variable name nucleotide
     // lookup table for nt names and colors
