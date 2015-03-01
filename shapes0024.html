@@ -417,8 +417,7 @@ function update(displayData, displayClass, displayCoords)  {
     });
 
     structureText.exit().remove();
-
-    var topRects = svg.selectAll(".topRects") // select topRects for outer menus
+/*    var topRects = svg.selectAll(".topRects") // select topRects for outer menus
         .data(structMenuValue); // join structMenuValue to rectangle
 
     topRects.enter()
@@ -433,6 +432,7 @@ function update(displayData, displayClass, displayCoords)  {
         .attr("height", menuHeight)
         .style("fill", "rgba(0, 0, 0, 0)"); // fill rect with transparent black
 
+*/
 
     // change to use structure with variable name nucleotide
     // lookup table for nt names and colors
@@ -496,6 +496,7 @@ function update(displayData, displayClass, displayCoords)  {
             .append("text"); // add empty text elements
 
         text.attr("class", displayClass + "Text")// set class so selectAll can find text elements
+            .attr("id", function(d, i) {return  displayClass + "Text" + i;}) // id so topCircles can find corresponding text
             .text(function(d) {return d}) // add text from
             .attr("x", function(d, i) {return displayCoords[i][0] * sizeFactor}) // position
             .attr("y", function(d, i) {return displayCoords[i][1] * sizeFactor + textHeight / 2.8})
@@ -553,28 +554,33 @@ function update(displayData, displayClass, displayCoords)  {
                     .style("stroke", "gray")
                     .style("stroke-width", 0);})
                 // on click display next nucleotide
-                .on("click", function(d, i) {
+                .on("click", function(d, i) {  //  why will text and color circle increment only once
+                    // the values in display data do increment
                     var j = 0;
                     // cycle thru nucleoArray by j, match key to d and get new key and fill value
                     for (j = 0; j < nucleoArray.length; j++) {
                         if (nucleoArray[j].key == d) {
                             var newKey = nucleoArray[(j + 1) % (nucleoArray.length - 1)].key; //get next nucleotide
                             var newFill = nucleoArray[(j + 1) % (nucleoArray.length - 1)].values[1]; // get next color
-                            d3.select(this) //select text for nt that user clicked
-                                .data(newKey) // update data 
-                                .text(newKey);  // update text to new key
+                            d3.select("#" + displayClass + "Text" + i) //select text element under clicked disk
+                                .data(newKey) // update text element's data 
+                                .text(newKey); // update text element's inner text
+                            d3.select(this)
+                                .data(newKey);
                             displayData[i] = newKey;  // update displayData to new key
                             d3.select("#" + displayClass + "Circle" + i) //select circle behind clickedText
                                 .style("fill", newFill);  // and update to new fill
                         };
                     };
                 });
+            
+            topCircles.exit().remove();
+
+
         };
-
-
         return displayData;
 }
-
+//rewrite so update is called only once
 // draw null NTs above and SW of bulge and 1 in circle
 update(nullDataBG, "null", nullCoordsBG);
 // draw 4 NTs in circle of 5 NTs for bulge
