@@ -392,12 +392,58 @@ function update(displayData, displayClass, displayCoords)  {
                                 refTable = loop_2_2;
                             };
 
+                                function replaceNucs(nucs, from, to){
+                                    for (var i=0; i<nucs.length; i++){
+                                        if (nucs[i] == from){
+                                            nucs[i] = to;
+                                        }
+                                    }
+                                    return nucs
+                                }
+
                                 function getResult(refFile, colNucArray, rowNucArray){
-                                    var result = [];
-                                    result[0] = colNucArray;
-                                    result[1] = rowNucArray;
-                                    result[2] = refFile[colNucArray][rowNucArray];
-                                    //return result;
+                                    var results = [];
+                                    if ((colNucArray.indexOf('N') == -1) && (colNucArray.indexOf('R') == -1) && (colNucArray.indexOf('Y') == -1) && (rowNucArray.indexOf('N') == -1) && (rowNucArray.indexOf('R') == -1) && (rowNucArray.indexOf('Y') == -1)){
+                                        // if no weird chars anywhere
+                                        results.push([colNucArray, rowNucArray, refFile[colNucArray][rowNucArray]]);
+                                    } else {
+                                        var cols = '';
+                                        var rows = '';
+                                        if ((colNucArray.indexOf('N') > -1) || (rowNucArray.indexOf('N') > -1)) {
+                                            // replace N with all 4
+                                            cols = replaceNucs(colNucArray, 'N', 'A');
+                                            rows = replaceNucs(rowNucArray, 'N', 'A');
+                                            results.push([cols, rows, refFile[cols][rows]]);
+                                            cols = replaceNucs(colNucArray, 'N', 'C');
+                                            rows = replaceNucs(rowNucArray, 'N', 'C');
+                                            results.push([cols, rows, refFile[cols][rows]]);
+                                            cols = replaceNucs(colNucArray, 'N', 'G');
+                                            rows = replaceNucs(rowNucArray, 'N', 'G');
+                                            results.push([cols, rows, refFile[cols][rows]]);
+                                            cols = replaceNucs(colNucArray, 'N', 'U');
+                                            rows = replaceNucs(rowNucArray, 'N', 'U');
+                                            results.push([cols, rows, refFile[cols][rows]]);
+                                        }
+                                        if ((colNucArray.indexOf('R') > -1) || (rowNucArray.indexOf('R') > -1)) {
+                                            // replace R with A,G
+                                            cols = replaceNucs(colNucArray, 'R', 'A');
+                                            rows = replaceNucs(rowNucArray, 'R', 'A');
+                                            results.push([cols, rows, refFile[cols][rows]]);
+                                            cols = replaceNucs(colNucArray, 'R', 'G');
+                                            rows = replaceNucs(rowNucArray, 'R', 'G');
+                                            results.push([cols, rows, refFile[cols][rows]]);
+                                        }
+                                        if ((colNucArray.indexOf('Y') > -1) || (rowNucArray.indexOf('Y') > -1)) {
+                                            // replace Y with C,U
+                                            cols = replaceNucs(colNucArray, 'Y', 'C');
+                                            rows = replaceNucs(rowNucArray, 'Y', 'C');
+                                            results.push([cols, rows, refFile[cols][rows]]);
+                                            cols = replaceNucs(colNucArray, 'Y', 'C');
+                                            rows = replaceNucs(rowNucArray, 'Y', 'C');
+                                            results.push([cols, rows, refFile[cols][rows]]);
+                                        }
+                                    }
+                                        //return result;
 
                                     var headingValues = ["column", "row", "energy"];
 
