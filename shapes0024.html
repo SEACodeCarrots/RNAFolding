@@ -139,6 +139,9 @@ var width = window.innerWidth,
         [   0,  190]  // col 4       x
     ],
     // pass different structMenuValue variations
+
+
+
     structMenuValue = ["Bulge", "Submit", "3nt", "1nt"],
 
     structMenuItems = [
@@ -150,11 +153,11 @@ var width = window.innerWidth,
 
 
     structMenuCoords = [
- //       x    y    height  width
-        [300, -150,   50  ,  200],
-        [300,  -50,   50  ,  200],
-        [300,   50,   50  ,  200],
-        [300,  150,   50  ,  200]
+ //       x    y    height  width      extra text
+        [-500, -350,   90  ,  280, "choose structure"],
+        [ 300,  -50,   60  ,  250, ""],
+        [ 300,   50,   60  ,  160, ""],
+        [ 300,  150,   60  ,  160, ""]
     ],
 
 // select the html body, add svg element to body, add group element 
@@ -181,9 +184,9 @@ function update(displayData, displayClass, displayCoords)  {
         .attr("y", function(d, i) {return structMenuCoords[i][1] * sizeFactor})
         .attr("rx", radius / 4) // round corners
         .attr("ry", radius / 4)
-        .attr("width", menuWidth) // set size
-        .attr("height", menuHeight)
-        .style("fill", "rgb(236, 252, 196)") // color inside rectangle
+        .attr("height", function(d, i) {return structMenuCoords[i][2] * sizeFactor}) // set size
+        .attr("width", function(d, i) {return structMenuCoords[i][3] * sizeFactor})//
+        .style("fill", "rgb(144, 132, 204)") // color inside rectangle
 
     // create text
     var structureText = svg.selectAll(".structText") // select text for outer menus
@@ -194,10 +197,10 @@ function update(displayData, displayClass, displayCoords)  {
         .attr("class", "structText") //assign class to text elements so svg.selectAll can find them
         .attr("id", function(d, i) {return "structText" + i;}) // id each element so topRects can find them
         .text(function(d) {return d}) // insert inner text in element into
-        .attr("x", function(d, i) {return structMenuCoords[i][0] * sizeFactor + 3 * radius})
-        .attr("y", function(d, i) {return structMenuCoords[i][1] * sizeFactor + radius * 1.5})
+        .attr("x", function(d, i) {return (structMenuCoords[i][0] + structMenuCoords[i][3] / 2) * sizeFactor})
+        .attr("y", function(d, i) {return (structMenuCoords[i][1] + structMenuCoords[i][2] / 1.3) * sizeFactor})
         .attr("text-anchor", "middle")
-        .style("font-size", textHeight + "px"); // size
+        .style("font-size", function(d, i) {return structMenuCoords[i][2] / 1.4 * sizeFactor + "px"}); // size
 
     structureText.exit().remove();
 
@@ -213,8 +216,8 @@ function update(displayData, displayClass, displayCoords)  {
         .attr("y", function(d, i) {return structMenuCoords[i][1] * sizeFactor})
         .attr("rx", radius / 4) // round corners
         .attr("ry", radius / 4)
-        .attr("width", menuWidth) // set size
-        .attr("height", menuHeight)
+        .attr("width", function(d, i) {return structMenuCoords[i][3] * sizeFactor}) // set size
+        .attr("height", function(d, i) {return structMenuCoords[i][2] * sizeFactor})
         .style("fill", "rgba(0, 0, 0, 0)") // fill rect with transparent black
         // add gray outline on mouseover
         .on("mouseover", function(){d3.select(this)
@@ -498,13 +501,13 @@ function update(displayData, displayClass, displayCoords)  {
     // lookup table for nt names and colors
         var nucleoArray = [
         //         nt              name        color
-            {key: "A", values: ["Adenine",    "#FFD635"]}, // yellow / gold
-            {key: "U", values: ["Uracil",     "#2878B3"]}, // blue
-            {key: "G", values: ["Guanine",    "#CA1D23"]}, // red
-            {key: "C", values: ["Cytosine",   "#358A40"]}, // green
+            {key: "A", values: ["Adenine",    "rgb(255, 214, 53)"]}, // yellow / gold
+            {key: "U", values: ["Uracil",     "rgb(40, 120, 179)"]}, // blue
+            {key: "G", values: ["Guanine",    "rgb(202, 29, 35)"]}, // red
+            {key: "C", values: ["Cytosine",   "rgb(53, 138, 64)"]}, // green
             {key: "R", values: ["puRine",     "rgb(226, 90, 0)"]}, // orange
             {key: "Y", values: ["pYrimidine", "rgb(55, 198, 184)"]}, // turquoise
-            {key: "N", values: ["unkNown",    "rgb(172, 144, 178)"]}, //purple
+            {key: "N", values: ["unkNown",    "rgb(193, 122, 157)"]}, //purple
             {key: "X", values: ["X null",     "silver"]}
         ];
 
