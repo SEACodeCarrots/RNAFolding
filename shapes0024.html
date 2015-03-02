@@ -482,7 +482,8 @@ function update(displayData, displayClass, displayCoords)  {
         legendText.attr("class", "legendText")
             .attr("x", -420 * sizeFactor)
             .attr("y", function(d, i) {return -150 * sizeFactor + i * 70 * sizeFactor})
-            .text(function(d, i) {return d.values[0]});
+            .text(function(d, i) {return d.values[0]})
+            .style("font-size", radius * 0.7 + "px");
 
         // draw a dot for each value in displayData per coords in displayData
         // select all circles of current display class
