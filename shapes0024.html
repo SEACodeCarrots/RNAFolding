@@ -153,7 +153,7 @@ var width = window.innerWidth,
  //       x    y    
         [250, -150],
         [250,  -50],
-        [250,  50],
+        [250,   50],
         [250,  150]
     ],
 
@@ -170,6 +170,8 @@ var width = window.innerWidth,
 // pass in array of nts, class text subpart, and 2D array of coords
 // display nts as dots per coordinates
 function update(displayData, displayClass, displayCoords)  {
+
+
 
     var structureMenu = svg.selectAll(".stuctMenuRect") // select rects for outer menus
         .data(structMenuValue); // join structMenuValue to rectangle
@@ -443,18 +445,20 @@ function update(displayData, displayClass, displayCoords)  {
             };// end for statement
         });// end on click function
 
+    topRects.exit().remove();
+
     // change to use structure with variable name nucleotide
     // lookup table for nt names and colors
         var nucleoArray = [
         //         nt              name        color
-            {key: "A", values: ["Adenine",    "yellow"]}, 
-            {key: "U", values: ["Uracil",     "blue"]}, 
-            {key: "G", values: ["Guanine",    "red"]}, 
-            {key: "C", values: ["Cytosine",   "green"]}, 
-            {key: "R", values: ["puRine",     "orange"]}, 
-            {key: "Y", values: ["pYrimidine", "turquoise"]}, 
-            {key: "N", values: ["unkNown",    "silver"]},
-            {key: "X", values: ["X null",     "pink"]}
+            {key: "A", values: ["Adenine",    "#FFD635"]}, // yellow / gold
+            {key: "U", values: ["Uracil",     "#2878B3"]}, // blue
+            {key: "G", values: ["Guanine",    "#CA1D23"]}, // red
+            {key: "C", values: ["Cytosine",   "#358A40"]}, // green
+            {key: "R", values: ["puRine",     "rgb(226, 90, 0)"]}, // orange
+            {key: "Y", values: ["pYrimidine", "rgb(55, 198, 184)"]}, // turquoise
+            {key: "N", values: ["unkNown",    "rgb(172, 144, 178)"]}, //purple
+            {key: "X", values: ["X null",     "silver"]}
         ];
       
         // draw a dot for each value in displayData per coords in displayData
@@ -483,16 +487,6 @@ function update(displayData, displayClass, displayCoords)  {
             });
 
         circles.exit().remove(); // delete any leftover elements
-        
-        if (displayClass == "active") { // only allow active nts to respond to mouse
-            // add gray outline on mouseover
-            circles.on("mouseover", function(){d3.select(this)
-                .style("stroke", "gray")
-                .style("stroke-width", 4);})
-            // remove gray outline when not mouseover
-            .on("mouseout", function(){d3.select(this)
-                .style("stroke", "gray")
-                .style("stroke-width", 0);});};
 
     // text on circles takes mouseover focus away from circle
     // needs fix  -- text mouseovers demonstrate this
@@ -509,6 +503,7 @@ function update(displayData, displayClass, displayCoords)  {
             .attr("x", function(d, i) {return displayCoords[i][0] * sizeFactor}) // position
             .attr("y", function(d, i) {return displayCoords[i][1] * sizeFactor + textHeight / 2.8})
             .attr("text-anchor", "middle") // position text by its middle
+           // .style("fill", "white")
             .style("font-size", textHeight + "px"); // size 
 
         text.exit().remove(); // delete any leftover elements
