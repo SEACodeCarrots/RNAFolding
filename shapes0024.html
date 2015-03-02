@@ -145,16 +145,16 @@ var width = window.innerWidth,
         ["Bulge", "Hairpin", "1-1 Loop", "1-2 Loop", "2-2 Loop"],
         ["Submit", "Results"],
         ["3nt", "4nt", "5nt", "6nt", "7nt", "8nt", "9nt"],
-        ["1nt", "2nts", "3nts", "4nts", "5nts", "6nts"]
+        ["1nt", "2nt", "3nt", "4nt", "5nt", "6nt"]
         ],
 
 
     structMenuCoords = [
- //       x    y    
-        [250, -150],
-        [250,  -50],
-        [250,   50],
-        [250,  150]
+ //       x    y    height  width
+        [300, -150,   50  ,  200],
+        [300,  -50,   50  ,  200],
+        [300,   50,   50  ,  200],
+        [300,  150,   50  ,  200]
     ],
 
 // select the html body, add svg element to body, add group element 
@@ -171,21 +171,19 @@ var width = window.innerWidth,
 // display nts as dots per coordinates
 function update(displayData, displayClass, displayCoords)  {
 
-
-
-    var structureMenu = svg.selectAll(".stuctMenuRect") // select rects for outer menus
+ var structureMenu = svg.selectAll(".stuctMenuRect") // select rects for outer menus
         .data(structMenuValue); // join structMenuValue to rectangle
 
     structureMenu.enter()
         .append("rect") // create rectangles
         .attr("class", "stuctMenuRect") // assign class to rectangles so svg.selectAll can find them
-        .attr("x", function(d, i) {return structMenuCoords[i][0]}) //position rectangles
-        .attr("y", function(d, i) {return structMenuCoords[i][1]})
+        .attr("x", function(d, i) {return structMenuCoords[i][0] * sizeFactor}) //position rectangles
+        .attr("y", function(d, i) {return structMenuCoords[i][1] * sizeFactor})
         .attr("rx", radius / 4) // round corners
         .attr("ry", radius / 4)
         .attr("width", menuWidth) // set size
         .attr("height", menuHeight)
-        .style("fill", "aqua"); // color inside rectangle
+        .style("fill", "rgb(236, 252, 196)") // color inside rectangle
 
     // create text
     var structureText = svg.selectAll(".structText") // select text for outer menus
@@ -196,10 +194,10 @@ function update(displayData, displayClass, displayCoords)  {
         .attr("class", "structText") //assign class to text elements so svg.selectAll can find them
         .attr("id", function(d, i) {return "structText" + i;}) // id each element so topRects can find them
         .text(function(d) {return d}) // insert inner text in element into
-        .attr("x", function(d, i) {return structMenuCoords[i][0] + 3 * radius})
-        .attr("y", function(d, i) {return structMenuCoords[i][1] + radius * 1.4})
+        .attr("x", function(d, i) {return structMenuCoords[i][0] * sizeFactor + 3 * radius})
+        .attr("y", function(d, i) {return structMenuCoords[i][1] * sizeFactor + radius * 1.5})
         .attr("text-anchor", "middle")
-        .style("font-size", textHeight + "px") // size
+        .style("font-size", textHeight + "px"); // size
 
     structureText.exit().remove();
 
@@ -211,8 +209,8 @@ function update(displayData, displayClass, displayCoords)  {
         .append("rect");
 
     topRects.attr("class", "topRects") // assign class to rectangles so svg.selectAll can find them
-        .attr("x", function(d, i) {return structMenuCoords[i][0]}) //position rectangles
-        .attr("y", function(d, i) {return structMenuCoords[i][1]})
+        .attr("x", function(d, i) {return structMenuCoords[i][0] * sizeFactor}) //position rectangles
+        .attr("y", function(d, i) {return structMenuCoords[i][1] * sizeFactor})
         .attr("rx", radius / 4) // round corners
         .attr("ry", radius / 4)
         .attr("width", menuWidth) // set size
@@ -503,7 +501,6 @@ function update(displayData, displayClass, displayCoords)  {
             .attr("x", function(d, i) {return displayCoords[i][0] * sizeFactor}) // position
             .attr("y", function(d, i) {return displayCoords[i][1] * sizeFactor + textHeight / 2.8})
             .attr("text-anchor", "middle") // position text by its middle
-           // .style("fill", "white")
             .style("font-size", textHeight + "px"); // size 
 
         text.exit().remove(); // delete any leftover elements
