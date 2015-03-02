@@ -458,7 +458,32 @@ function update(displayData, displayClass, displayCoords)  {
             {key: "N", values: ["unkNown",    "rgb(172, 144, 178)"]}, //purple
             {key: "X", values: ["X null",     "silver"]}
         ];
-      
+
+        // display a legend of nts with filled circles and names
+
+        var legendCircs = svg.selectAll(".legendCircs")
+            .data(nucleoArray)
+            .enter()
+            .append("circle");
+
+        legendCircs.attr("class", "legendCircs")
+            .attr("cx", -450 * sizeFactor)
+            .attr("cy", function(d, i) {return -160 * sizeFactor + i * 70 * sizeFactor})
+            .attr("r", radius / 2)
+            .style("fill", function(d, i) {
+                return d.values[1]                
+            });
+
+        var legendText = svg.selectAll(".legendText")
+            .data(nucleoArray)
+            .enter()
+            .append("text");
+
+        legendText.attr("class", "legendText")
+            .attr("x", -420 * sizeFactor)
+            .attr("y", function(d, i) {return -150 * sizeFactor + i * 70 * sizeFactor})
+            .text(function(d, i) {return d.values[0]});
+
         // draw a dot for each value in displayData per coords in displayData
         // select all circles of current display class
         var circles = svg.selectAll("." + displayClass + "Circle")
