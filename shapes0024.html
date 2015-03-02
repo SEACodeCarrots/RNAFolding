@@ -393,8 +393,11 @@ function update(displayData, displayClass, displayCoords)  {
                             };
 
                                 function getResult(refFile, colNucArray, rowNucArray){
-                                    result = refFile[colNucArray][rowNucArray];
-
+                                    var result = [];
+                                    result[0] = colNucArray;
+                                    result[1] = rowNucArray;
+                                    result[2] = refFile[colNucArray][rowNucArray];
+                                    //return result;
 
                                     var headingValues = ["column", "row", "energy"];
 
