@@ -12,13 +12,10 @@ var width = window.innerWidth,
     height = window.innerHeight,
 
 // set variables for proportional display
-    smallDim = Math.min(width, height),
+    smallDim = Math.min(width, height) * 0.8,
+    sizeFactor = smallDim / 900,
     radius = smallDim / 20,
     textHeight = radius * 1.5,
-    sizeFactor = smallDim / 900,
-// needs background
-    menuHeight = radius * 2,
-    menuWidth = radius * 6,
 
 
 // ? separate data to 2nd file
@@ -97,21 +94,21 @@ var width = window.innerWidth,
 
     nullCoordsBG = [
  //       cx    cy
-        [-80, -220],
-        [ 80, -220],
-        [135,   85],
-        [-80,  350],
-        [ 80,  350]
+        [-140, -240],
+        [ 10, -290],
+        [155,   0],
+        [-140,  240],
+        [ 10,  290]
     ],
 
     activeDataBG = ["A", "A", "A", "A"], 
 
     activeCoordsBG = [
  //       cx    cy                  
-        [ -80,  -60], //col 1        x   x
-        [  80,  -60], //col 2       c1  c2             
-        [ -135,  85], //row 1      r1    x 
-        [    0, 190]  //row 2     x   r2
+        [ -90,  -80], //col 1        x   x
+        [  60,  -130], //col 2       c1  c2             
+        [ -90,  80], //row 1      r1    x 
+        [    60, 130]  //row 2     x   r2
     ],                //             x
 
 // data and coords for 1-2 loops 
@@ -156,8 +153,8 @@ var width = window.innerWidth,
  //       x    y    height  width      extra text
         [-500, -380,   60  ,  200, "choose structure"],
         [ 300,  -50,   60  ,  250, ""],
-        [-450, -270,   60  ,  120, ""],
-        [-450, -270,   60  ,  120, ""]
+        [-450, -310,   60  ,  120, ""],
+        [-450, -310,   60  ,  120, ""]
     ],
 
 // select the html body, add svg element to body, add group element 
@@ -204,12 +201,14 @@ function update(displayData, displayClass, displayCoords)  {
 
     structureText.exit().remove(); 
 
-    //
-    var topRects = svg.selectAll(".topRects") // select topRects for outer menus
-        .data(structMenuValue); // join structMenuValue to rectangle
+    // put transparent rectangles over menu so
+    // click responsive object over both background rectangle and text
+    
+    var topRects = svg.selectAll(".topRects") // select topRects 
+        .data(structMenuValue); // join structMenuValue to rectangles
 
     topRects.enter()
-        .append("rect");
+        .append("rect"); 
 
     topRects.attr("class", "topRects") // assign class to rectangles so svg.selectAll can find them
         .attr("x", function(d, i) {return structMenuCoords[i][0] * sizeFactor}) //position rectangles
@@ -227,6 +226,7 @@ function update(displayData, displayClass, displayCoords)  {
         .on("mouseout", function(){d3.select(this)
             .style("stroke", "gray")
             .style("stroke-width", 0);})
+        // on click change data for this object as well as text and background rectangle below
         .on("click", function(d, i) {
             for (var j = 0; j < structMenuItems[i].length; j++) {
                 if (structMenuItems[i][j] == d) {
@@ -235,6 +235,8 @@ function update(displayData, displayClass, displayCoords)  {
                     d3.select("#structText" + i) // select text that user clicked
                         .data([newText]) // update data to new text
                         .text(newText);  // update text to new text
+                        // even though this transparent has no color or text to change
+                        // it still needs its data to know what to increment to on next click
                     d3.select(this) //select the clicked rectangle
                         .data([newText]); //update topRect data to new text
 
@@ -500,13 +502,13 @@ function update(displayData, displayClass, displayCoords)  {
     // change to use structure with variable name nucleotide
     // lookup table for nt names and colors
         var nucleoArray = [
-        //         nt              name        color
+        //         nt              name                color
             {key: "A", values: ["Adenine",    "rgb(255, 214, 53)"]}, // yellow / gold
             {key: "U", values: ["Uracil",     "rgb(40, 120, 179)"]}, // blue
             {key: "G", values: ["Guanine",    "rgb(202, 29, 35)"]}, // red
             {key: "C", values: ["Cytosine",   "rgb(53, 138, 64)"]}, // green
-            {key: "R", values: ["puRine",     "rgb(226, 90, 0)"]}, // orange
-            {key: "Y", values: ["pYrimidine", "rgb(55, 198, 184)"]}, // turquoise
+            {key: "R", values: ["puRine (A or G)",     "rgb(226, 90, 0)"]}, // orange
+            {key: "Y", values: ["pYrimidine (U or C)", "rgb(55, 198, 184)"]}, // turquoise
             {key: "N", values: ["unkNown",    "rgb(193, 122, 157)"]}, //purple
             {key: "X", values: ["X null",     "silver"]}
         ];
@@ -519,7 +521,7 @@ function update(displayData, displayClass, displayCoords)  {
             .append("circle");
 
         legendCircs.attr("class", "legendCircs")
-            .attr("cx", -450 * sizeFactor)
+            .attr("cx", -530 * sizeFactor)
             .attr("cy", function(d, i) {return -160 * sizeFactor + i * 70 * sizeFactor})
             .attr("r", radius / 2)
             .style("fill", function(d, i) {
@@ -532,7 +534,7 @@ function update(displayData, displayClass, displayCoords)  {
             .append("text");
 
         legendText.attr("class", "legendText")
-            .attr("x", -420 * sizeFactor)
+            .attr("x", -500 * sizeFactor)
             .attr("y", function(d, i) {return -150 * sizeFactor + i * 70 * sizeFactor})
             .text(function(d, i) {return d.values[0]})
             .style("font-size", radius * 0.7 + "px");
