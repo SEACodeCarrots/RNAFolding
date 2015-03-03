@@ -31,62 +31,62 @@ def getValues(fileName):
 	return colsToRowsToValues
 
 
-loop_2_2 = getValues('Loop_2_2.csv')
+loop_2_2 = getValues('csv/Loop_2_2.csv')
 f = open('loop_2_2.json', 'w')
 json.dump(loop_2_2, f)
 f.close()
 
-loop_1_2 = getValues('Loop_1_2.csv')
+loop_1_2 = getValues('csv/Loop_1_2.csv')
 f = open('loop_1_2.json', 'w')
 json.dump(loop_1_2, f)
 f.close()
 
-bulge_1nt = getValues('Bulge_1nt.csv')
+bulge_1nt = getValues('csv/Bulge_1nt.csv')
 f = open('bulge_1nt.json', 'w')
 json.dump(bulge_1nt, f)
 f.close()
 
-bulge_2nt = getValues('Bulge_2nt.csv')
+bulge_2nt = getValues('csv/Bulge_2nt.csv')
 f = open('bulge_2nt.json', 'w')
 json.dump(bulge_2nt, f)
 f.close()
 
-bulge_3nt = getValues('Bulge_3nt.csv')
+bulge_3nt = getValues('csv/Bulge_3nt.csv')
 f = open('bulge_3nt.json', 'w')
 json.dump(bulge_3nt, f)
 f.close()
 
-bulge_4nt = getValues('Bulge_4nt.csv')
+bulge_4nt = getValues('csv/Bulge_4nt.csv')
 f = open('bulge_4nt.json', 'w')
 json.dump(bulge_4nt, f)
 f.close()
 
-bulge_5nt = getValues('Bulge_5nt.csv')
+bulge_5nt = getValues('csv/Bulge_5nt.csv')
 f = open('bulge_5nt.json', 'w')
 json.dump(bulge_5nt, f)
 f.close()
 
-bulge_6nt = getValues('Bulge_6nt.csv')
+bulge_6nt = getValues('csv/Bulge_6nt.csv')
 f = open('bulge_6nt.json', 'w')
 json.dump(bulge_6nt, f)
 f.close()
 
-hairpin = getValues('Hairpin.csv')
+hairpin = getValues('csv/Hairpin.csv')
 f = open('hairpin.json', 'w')
 json.dump(hairpin, f)
 f.close()
 
-loop_1_1_GG = getValues('Loop_1_1_GG.csv')
+loop_1_1_GG = getValues('csv/Loop_1_1_GG.csv')
 f = open('loop_1_1_GG.json', 'w')
 json.dump(loop_1_1_GG, f)
 f.close()
 
-loop_1_1_UU = getValues('Loop_1_1_UU.csv')
+loop_1_1_UU = getValues('csv/Loop_1_1_UU.csv')
 f = open('loop_1_1_UU.json', 'w')
 json.dump(loop_1_1_UU, f)
 f.close()
 
-loop_1_1_noboost = getValues('Loop_1_1.csv')
+loop_1_1_noboost = getValues('csv/Loop_1_1.csv')
 f = open('loop_1_1_noboost.json', 'w')
 json.dump(loop_1_1_noboost, f)
 f.close()
