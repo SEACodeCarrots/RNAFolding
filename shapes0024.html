@@ -164,28 +164,38 @@ var width = window.innerWidth,
 
     nullCoords12 = [
  //       cx    cy
-        [-110, -300],
-        [ 50, -300],
-        [-110,  300],
-        [ 50,  300]
+        [-140, -310],
+        [ 20, -340],
+        [-140,  310],
+        [ 20,  340]
     ],
 
     activeData12 = ["A", "A", "A", "A", "A", "A", "A"], 
 
     activeCoords12 = [
  //       cx    cy
-        [ -110, -150], // col 1       
+        [ -110,-150], // col 1       
         [  50, -180], // col 2       x   x
         [ 180,  -80], // row 2      c1   c2
-        [-180,   0], // row 1     r1     r2
-        [ 180,  80], // row 3     c3    r3
-        [-110,   150], // col 3    x   c4
+        [-180,    0], // row 1     r1     r2
+        [ 180,   80], // row 3     c3    r3
+        [-110,  150], // col 3    x   c4
         [  50,  180]  // col 4       x
     ],
     // pass different structMenuValue variations
 
 
-    lines12 = [[]],
+    lines12 = [
+        [-140, -310, -110, -150],
+        [-110, -150, -180, 0],
+        [-180, 0, -110,  150],
+        [-110,  150, -140,  310],
+        [20, -340, 50, -180],
+        [50, -180, 180,  -80],
+        [180,  -80, 180,  80],
+        [180,  80, 50,  180],
+        [50,  180, 20,  340]
+    ],
 
 
     structMenuValue = ["Bulge", "Submit", "3nt", "1nt"],
@@ -196,7 +206,6 @@ var width = window.innerWidth,
         ["3nt", "4nt", "5nt", "6nt", "7nt", "8nt", "9nt"],
         ["1nt", "2nt", "3nt", "4nt", "5nt", "6nt"]
         ],
-
 
     structMenuCoords = [
  //       x    y    height  width      extra text
