@@ -154,10 +154,10 @@ var width = window.innerWidth,
 
     structMenuCoords = [
  //       x    y    height  width      extra text
-        [-500, -350,   90  ,  280, "choose structure"],
+        [-500, -350,   90  ,  300, "choose structure"],
         [ 300,  -50,   60  ,  250, ""],
-        [ 300,   50,   60  ,  160, ""],
-        [ 300,  150,   60  ,  160, ""]
+        [-450, -270,   60  ,  120, ""],
+        [-450, -270,   60  ,  120, ""]
     ],
 
 // select the html body, add svg element to body, add group element 
@@ -564,9 +564,6 @@ function update(displayData, displayClass, displayCoords)  {
 
         circles.exit().remove(); // delete any leftover elements
 
-    // text on circles takes mouseover focus away from circle
-    // needs fix  -- text mouseovers demonstrate this
-
     var text = svg.selectAll("." + displayClass + "Text") // select current potential text of displayClass
             .data(displayData);  // join displayData to selected text
 
@@ -581,24 +578,24 @@ function update(displayData, displayClass, displayCoords)  {
             .attr("text-anchor", "middle") // position text by its middle
             .style("font-size", textHeight + "px"); // size 
 
-        text.exit().remove(); // delete any leftover elements
+        text.exit().remove(); // delete any text elements no longer associated with displayData members
 
         if (displayClass == "active") {  // only put top dots over active nts
 
             // make clear dots to click on
             topCircles = svg.selectAll(".topCirc") // select all elements of class topCircle
-                .data(displayData);
+                .data(displayData); //join displayData to topCircles
 
             topCircles.enter()
-                .append("circle");
+                .append("circle"); // create a circle for each element of displayData
 
-            topCircles.attr("class", "topCirc")
+            topCircles.attr("class", "topCirc") // assign class topCirc to circles
                 .attr("id", function(d, i) {return "topCirc" + i})
                 .attr("cx", function(d, i) {return d3.select("#" + displayClass + "Circle" + i).attr("cx")})
                 .attr("cy", function(d, i) {return d3.select("#" + displayClass + "Circle" + i).attr("cy")})
                 .attr("r", radius)
                 .style("fill", "rgba(0, 0, 0, 0)") // fill dot with transparent black
-
+                // add gray outline on mouseover
                 .on("mouseover", function(){d3.select(this)
                 .style("stroke", "gray")
                 .style("stroke-width", 4);})
