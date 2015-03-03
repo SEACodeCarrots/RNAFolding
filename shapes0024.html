@@ -154,7 +154,7 @@ var width = window.innerWidth,
 
     structMenuCoords = [
  //       x    y    height  width      extra text
-        [-500, -350,   90  ,  300, "choose structure"],
+        [-500, -380,   60  ,  200, "choose structure"],
         [ 300,  -50,   60  ,  250, ""],
         [-450, -270,   60  ,  120, ""],
         [-450, -270,   60  ,  120, ""]
@@ -186,7 +186,7 @@ function update(displayData, displayClass, displayCoords)  {
         .attr("ry", radius / 4)
         .attr("height", function(d, i) {return structMenuCoords[i][2] * sizeFactor}) // set size
         .attr("width", function(d, i) {return structMenuCoords[i][3] * sizeFactor})//
-        .style("fill", "rgb(144, 132, 204)") // color inside rectangle
+        .style("fill", "rgb(144, 132, 204)"); // color inside rectangle
 
     // create text
     var structureText = svg.selectAll(".structText") // select text for outer menus
@@ -198,13 +198,13 @@ function update(displayData, displayClass, displayCoords)  {
         .attr("id", function(d, i) {return "structText" + i;}) // id each element so topRects can find them
         .text(function(d) {return d}) // insert inner text in element into
         .attr("x", function(d, i) {return (structMenuCoords[i][0] + structMenuCoords[i][3] / 2) * sizeFactor})
-        .attr("y", function(d, i) {return (structMenuCoords[i][1] + structMenuCoords[i][2] / 1.3) * sizeFactor})
+        .attr("y", function(d, i) {return (structMenuCoords[i][1] + structMenuCoords[i][2] / 1.33) * sizeFactor})
         .attr("text-anchor", "middle")
         .style("font-size", function(d, i) {return structMenuCoords[i][2] / 1.4 * sizeFactor + "px"}); // size
 
-    structureText.exit().remove();
+    structureText.exit().remove(); 
 
-
+    //
     var topRects = svg.selectAll(".topRects") // select topRects for outer menus
         .data(structMenuValue); // join structMenuValue to rectangle
 
@@ -235,8 +235,8 @@ function update(displayData, displayClass, displayCoords)  {
                     d3.select("#structText" + i) // select text that user clicked
                         .data([newText]) // update data to new text
                         .text(newText);  // update text to new text
-                    d3.select(this)
-                        .data([newText]);
+                    d3.select(this) //select the clicked rectangle
+                        .data([newText]); //update topRect data to new text
 
                     switch(newText) {
                         case structMenuItems[0][0]:
@@ -556,7 +556,7 @@ function update(displayData, displayClass, displayCoords)  {
                 var j = 0;
                 for (j = 0; j < nucleoArray.length; j++) { // look thru nucleoArray
                     if(nucleoArray[j].key == d) { // find color for current value
-                        return nucleoArray[j].values[1];
+                        return nucleoArray[j].values[1]; // send this 
                     };
                 };
                 
