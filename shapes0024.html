@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>RNAFolding</title>
+    <title>RNA Switch Widget</title>
 </head>
 <body>
 <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
@@ -12,7 +12,7 @@ var width = window.innerWidth,
     height = window.innerHeight,
 
 // set variables for proportional display
-    smallDim = Math.min(width, height) * 0.8,
+    smallDim = Math.min(width, height) * 0.7,
     sizeFactor = smallDim / 900,
     radius = smallDim / 20,
     textHeight = radius * 1.5,
@@ -42,6 +42,9 @@ var width = window.innerWidth,
         [  80,  140]  // row 2
     ],
 
+    lines11 = [[]],
+
+
 // data and coords for 2-2 loop
     nullData22 = ["X", "X", "X", "X"],
 
@@ -67,6 +70,12 @@ var width = window.innerWidth,
         [  80,  190]  // col 4
     ], 
 
+    lines22 = [
+        [-80, -350, -80, -190],
+        [-80, -190, -80, -190]
+    ],
+
+
 // data and coords for hairpin
     nullDataHP = ["X", "X"],
 
@@ -87,6 +96,17 @@ var width = window.innerWidth,
         [ -80, 220], // 3rd nt
         [  80, 220]  // 4th nt
     ],
+
+    linesHP = [
+        [-80, -220, -80, -60],
+        [-80, -60, -150, 80],
+        [-150, 80, -80, 220],
+        [-80, 220, 80, 220],
+        [80, 220, 150, 80],
+        [150, 80, 80, -60],
+        [80, 60, 80, -220]
+
+   ],
 
 // data and coords for bulge -- needs bulge size menu of one to six nts -- 
 // rough coords only -- needs exact coords --
@@ -110,6 +130,8 @@ var width = window.innerWidth,
         [ -90,  80], //row 1      r1    x 
         [    60, 130]  //row 2     x   r2
     ],                //             x
+
+    linesBG = [[]],
 
 // data and coords for 1-2 loops 
 // in progress -- not right -- needs exact coords --
@@ -138,6 +160,8 @@ var width = window.innerWidth,
     // pass different structMenuValue variations
 
 
+    lines12 = [[]],
+
 
     structMenuValue = ["Bulge", "Submit", "3nt", "1nt"],
 
@@ -151,10 +175,10 @@ var width = window.innerWidth,
 
     structMenuCoords = [
  //       x    y    height  width      extra text
-        [-500, -380,   60  ,  200, "choose structure"],
-        [ 300,  -50,   60  ,  250, ""],
-        [-450, -310,   60  ,  120, ""],
-        [-450, -310,   60  ,  120, ""]
+        [-500, -380,   60  ,  200, ""],
+        [ 300,  -380,   60  ,  200, ""],
+        [-460, -310,   60  ,  120, ""],
+        [-460, -310,   60  ,  120, ""]
     ],
 
 // select the html body, add svg element to body, add group element 
@@ -235,7 +259,7 @@ function update(displayData, displayClass, displayCoords)  {
                     d3.select("#structText" + i) // select text that user clicked
                         .data([newText]) // update data to new text
                         .text(newText);  // update text to new text
-                        // even though this transparent has no color or text to change
+                        // even though this transparent rect has no color or text to be changed
                         // it still needs its data to know what to increment to on next click
                     d3.select(this) //select the clicked rectangle
                         .data([newText]); //update topRect data to new text
