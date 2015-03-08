@@ -121,7 +121,7 @@ var width = window.innerWidth,
         [-80, 220, 80, 220],
         [80, 220, 150, 80],
         [150, 80, 80, -60],
-        [80, 60, 80, -220]
+        [80, -60, 80, -220]
 
    ],
 
@@ -575,18 +575,22 @@ function update(displayData, displayClass, displayCoords, displaylines)  {
         // draw lines under dots
 
 
-        var myLines = svg.selectAll("line")
-            .data(displaylines);
+        if (displayClass == "null") {var myLines = svg.selectAll("line")
+                    .data(displaylines);
+        
+                myLines.enter()
+                    .append("line");
+        
+                myLines.attr("x1", function(d, i) {return d[0] * sizeFactor})
+                    .attr("x2", function(d, i) {return d[2] * sizeFactor})
+                    .attr("y1", function(d, i) {return d[1] * sizeFactor})
+                    .attr("y2", function(d, i) {return d[3] * sizeFactor})
+                    .attr("stroke-width", 2)
+                    .attr("stroke", "black");
 
-        myLines.enter()
-            .append("line");
+                myLines.exit().remove();
 
-        myLines.attr("x1", function(d, i) {return d[0] * sizeFactor})
-            .attr("x2", function(d, i) {return d[2] * sizeFactor})
-            .attr("y1", function(d, i) {return d[1] * sizeFactor})
-            .attr("y2", function(d, i) {return d[3] * sizeFactor})
-            .attr("stroke-width", 2)
-            .attr("stroke", "black"); 
+                }; 
 
 
         // display a legend of nts with filled circles and names
