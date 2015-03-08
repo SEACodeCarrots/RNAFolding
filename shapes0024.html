@@ -315,25 +315,25 @@ function update(displayData, displayClass, displayCoords, displaylines)  {
                             // draw null NTs above hairpin
                             update(nullDataHP, "null", nullCoordsHP, linesHP);
                             //  draw circle of 6 NTs for hairpin
-                            activeDataHP = update(activeDataHP, "active", activeCoordsHP, linesHP);
+                            activeDataHP = update(activeDataHP, "active", activeCoordsHP);
                             break;
                         case structMenuItems[0][2]:
                             // draw null NTs above and below 1-1 loop
                             update(nullData11, "null", nullCoords11, lines11);
                             // draw circle of 6 NTs for 1-1 loop
-                            activeData11 = update(activeData11, "active", activeCoords11, lines11);
+                            activeData11 = update(activeData11, "active", activeCoords11);
                             break;
                         case structMenuItems[0][3]:
                             // draw null NTs above and SW of 1-2 loop
                             update(nullData12, "null", nullCoords12, lines12);
                             // draw 7 NTs in circle for 1-2 loop
-                            activeData12 = update(activeData12, "active", activeCoords12, lines12);
+                            activeData12 = update(activeData12, "active", activeCoords12);
                             break;
                         case structMenuItems[0][4]:
                             // draw null NTs above and below 2-2 loop
                             update(nullData22, "null", nullCoords22, lines22);
                             // draw circle of 8 NTs for 2-2 loop
-                            activeData22 = update(activeData22, "active", activeCoords22, lines22);
+                            activeData22 = update(activeData22, "active", activeCoords22);
                             break;
                         case structMenuItems[1][0]:
                             // import JSON file
