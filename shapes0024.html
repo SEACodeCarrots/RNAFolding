@@ -225,6 +225,10 @@ var width = window.innerWidth,
 // move origin of group element to center of svg
         .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
+    svg.append("g")
+        .attr("id", "lineGroup");
+
+
 
 // pass in array of nts, class text subpart, and 2D array of coords
 // display nts as dots per coordinates
@@ -304,7 +308,7 @@ function update(displayData, displayClass, displayCoords, displaylines)  {
                             // draw null NTs above and SW of bulge and 1 in circle
                             update(nullDataBG, "null", nullCoordsBG, linesBG);
                             // draw 4 NTs in circle of 5 NTs for bulge
-                            activeDataBG = update(activeDataBG, "active", activeCoordsBG, linesBG);
+                            activeDataBG = update(activeDataBG, "active", activeCoordsBG);
                             // now add in the number of nts 
                             break;
                         case structMenuItems[0][1]:
@@ -573,9 +577,12 @@ function update(displayData, displayClass, displayCoords, displaylines)  {
         ];
 
         // draw lines under dots
+        // 
 
 
-        if (displayClass == "null") {var myLines = svg.selectAll("line")
+        if (displayClass == "null") {
+            var myLines = svg.select("#lineGroup")
+                .selectAll("line")
                     .data(displaylines);
         
                 myLines.enter()
