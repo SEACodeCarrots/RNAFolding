@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<!-- title page so it shows up in the tab -->
     <title>RNA Switch Widget</title>
 </head>
 <body>
@@ -125,8 +126,7 @@ var width = window.innerWidth,
 
    ],
 
-// data and coords for bulge -- needs bulge size menu of one to six nts -- 
-// rough coords only -- needs exact coords --
+// data and coords for bulge 
     nullDataBG = ["X", "X", "X", "X", "X"],
 
     nullCoordsBG = [
@@ -159,7 +159,6 @@ var width = window.innerWidth,
     ],
 
 // data and coords for 1-2 loops 
-// in progress -- not right -- needs exact coords --
     nullData12 = ["X", "X", "X", "X"],
 
     nullCoords12 = [
@@ -224,15 +223,17 @@ var width = window.innerWidth,
     .append("g")
 // move origin of group element to center of svg
         .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
-
+    // create a group within group above and give it id so lines can be put inside.
+    // because this group is defined before the other svg elements in group above
+    // anything put inside lineGroup will be drawn under all other svg
     svg.append("g")
         .attr("id", "lineGroup");
 
 
 
 // pass in array of nts, class text subpart, and 2D array of coords
-// display nts as dots per coordinates
-function update(displayData, displayClass, displayCoords, displaylines)  {
+// display nts as dots per coordinates. If null class line coords are passed also
+function update(displayData, displayClass, displayCoords, displayLines)  {
 
  var structureMenu = svg.selectAll(".stuctMenuRect") // select rects for outer menus
         .data(structMenuValue); // join structMenuValue to rectangle
@@ -309,7 +310,6 @@ function update(displayData, displayClass, displayCoords, displaylines)  {
                             update(nullDataBG, "null", nullCoordsBG, linesBG);
                             // draw 4 NTs in circle of 5 NTs for bulge
                             activeDataBG = update(activeDataBG, "active", activeCoordsBG);
-                            // now add in the number of nts 
                             break;
                         case structMenuItems[0][1]:
                             // draw null NTs above hairpin
@@ -564,164 +564,167 @@ function update(displayData, displayClass, displayCoords, displaylines)  {
 
     // change to use structure with variable name nucleotide
     // lookup table for nt names and colors
-        var nucleoArray = [
-        //         nt              name                color
-            {key: "A", values: ["Adenine",    "rgb(255, 214, 53)"]}, // yellow / gold
-            {key: "U", values: ["Uracil",     "rgb(40, 120, 179)"]}, // blue
-            {key: "G", values: ["Guanine",    "rgb(202, 29, 35)"]}, // red
-            {key: "C", values: ["Cytosine",   "rgb(53, 138, 64)"]}, // green
-            {key: "R", values: ["puRine (A or G)",     "rgb(226, 90, 0)"]}, // orange
-            {key: "Y", values: ["pYrimidine (U or C)", "rgb(55, 198, 184)"]}, // turquoise
-            {key: "N", values: ["unkNown",    "rgb(193, 122, 157)"]}, //purple
-            {key: "X", values: ["X null",     "silver"]}
-        ];
+    var nucleoArray = [
+    //         nt              name                color
+        {key: "A", values: ["Adenine",    "rgb(255, 214, 53)"]}, // yellow / gold
+        {key: "U", values: ["Uracil",     "rgb(40, 120, 179)"]}, // blue
+        {key: "G", values: ["Guanine",    "rgb(202, 29, 35)"]}, // red
+        {key: "C", values: ["Cytosine",   "rgb(53, 138, 64)"]}, // green
+        {key: "R", values: ["puRine (A or G)",     "rgb(226, 90, 0)"]}, // orange
+        {key: "Y", values: ["pYrimidine (U or C)", "rgb(55, 198, 184)"]}, // turquoise
+        {key: "N", values: ["unkNown",    "rgb(193, 122, 157)"]}, //purple
+        {key: "X", values: ["X null",     "silver"]}
+    ];
 
-        // draw lines under dots
-        // 
+    // draw lines under dots
+    if (displayClass == "null") { // since update runs twice, and lines need once, check displayClass
+        // and only run for null nts
+
+        var myLines = svg.select("#lineGroup") // select lineGroup from inside svg group by id
+            .selectAll("line") // select all lines from lineGroup
+                .data(displayLines); // join displaylines to myLines
+    
+            myLines.enter() // work with new lines only
+                .append("line"); // add new line for each new data item
+    
+            myLines.attr("x1", function(d, i) {return d[0] * sizeFactor}) // now work with all the lines
+                .attr("x2", function(d, i) {return d[2] * sizeFactor}) // assign position and stroke
+                .attr("y1", function(d, i) {return d[1] * sizeFactor}) 
+                .attr("y2", function(d, i) {return d[3] * sizeFactor}) 
+                .attr("stroke-width", 2)
+                .attr("stroke", "black");
+
+            // the exit subsection contains the lines not currently associated
+            myLines.exit() // with items from displaylines
+                .remove(); // remove any lines not representing current data
+
+            }; 
 
 
-        if (displayClass == "null") {
-            var myLines = svg.select("#lineGroup")
-                .selectAll("line")
-                    .data(displaylines);
-        
-                myLines.enter()
-                    .append("line");
-        
-                myLines.attr("x1", function(d, i) {return d[0] * sizeFactor})
-                    .attr("x2", function(d, i) {return d[2] * sizeFactor})
-                    .attr("y1", function(d, i) {return d[1] * sizeFactor})
-                    .attr("y2", function(d, i) {return d[3] * sizeFactor})
-                    .attr("stroke-width", 2)
-                    .attr("stroke", "black");
+    // display a legend of nts with filled circles and names
 
-                myLines.exit().remove();
+    var legendCircs = svg.selectAll(".legendCircs") // select all the elements classed as legendCircs
+        .data(nucleoArray) // join nucleoArray to legendCircs
+        .enter() //begin working with data not already paired with svg elements
+        .append("circle"); // make circles for unpaired data from nucleoArray
 
-                }; 
+    legendCircs.attr("class", "legendCircs") 
+        .attr("cx", -530 * sizeFactor)
+        .attr("cy", function(d, i) {return -160 * sizeFactor + i * 70 * sizeFactor})
+        .attr("r", radius / 2)
+        .style("fill", function(d, i) {
+            return d.values[1]                
+        });
 
+    var legendText = svg.selectAll(".legendText")
+        .data(nucleoArray)
+        .enter()
+        .append("text");
 
-        // display a legend of nts with filled circles and names
+    legendText.attr("class", "legendText")
+        .attr("x", -500 * sizeFactor)
+        .attr("y", function(d, i) {return -150 * sizeFactor + i * 70 * sizeFactor})
+        .text(function(d, i) {return d.values[0]})
+        .style("font-size", radius * 0.7 + "px");
 
-        var legendCircs = svg.selectAll(".legendCircs")
-            .data(nucleoArray)
-            .enter()
-            .append("circle");
+    // draw a dot for each value in displayData per coords in displayData
+    // select all circles of current display class
+    var circles = svg.selectAll("." + displayClass + "Circle")
+        .data(displayData); // join displayData to selected circles
 
-        legendCircs.attr("class", "legendCircs")
-            .attr("cx", -530 * sizeFactor)
-            .attr("cy", function(d, i) {return -160 * sizeFactor + i * 70 * sizeFactor})
-            .attr("r", radius / 2)
-            .style("fill", function(d, i) {
-                return d.values[1]                
-            });
+    circles.enter() // create an enter subsection
+        .append("circle"); // add circles as needed
 
-        var legendText = svg.selectAll(".legendText")
-            .data(nucleoArray)
-            .enter()
-            .append("text");
-
-        legendText.attr("class", "legendText")
-            .attr("x", -500 * sizeFactor)
-            .attr("y", function(d, i) {return -150 * sizeFactor + i * 70 * sizeFactor})
-            .text(function(d, i) {return d.values[0]})
-            .style("font-size", radius * 0.7 + "px");
-
-        // draw a dot for each value in displayData per coords in displayData
-        // select all circles of current display class
-        var circles = svg.selectAll("." + displayClass + "Circle")
-            .data(displayData); // join displayData to selected circles
-
-        circles.enter() // create an enter subsection
-            .append("circle"); // add circles as needed
-
-        circles.attr("class", displayClass + "Circle") // set class so selectAll can find circles
-            // add ids by index so single dots can be selected
-            .attr("id", function(d, i) {return displayClass + "Circle" + i;})// id for individual color cycling
-            .text(function(d) {return d}) // insert text from data into inner html
-            .attr("r", radius) //set dot size
-            .attr("cx", function(d, i) {return displayCoords[i][0] * sizeFactor}) // position circles
-            .attr("cy", function(d, i) {return displayCoords[i][1] * sizeFactor}) 
-            .style("fill", function(d, i) { // color inside circles
-                var j = 0;
-                for (j = 0; j < nucleoArray.length; j++) { // look thru nucleoArray
-                    if(nucleoArray[j].key == d) { // find color for current value
-                        return nucleoArray[j].values[1]; // send this 
-                    };
+    circles.attr("class", displayClass + "Circle") // set class so selectAll can find circles
+        // add ids by index so single dots can be selected
+        .attr("id", function(d, i) {return displayClass + "Circle" + i;})// id for individual color cycling
+        .text(function(d) {return d}) // insert text from data into inner html
+        .attr("r", radius) //set dot size
+        .attr("cx", function(d, i) {return displayCoords[i][0] * sizeFactor}) // position circles
+        .attr("cy", function(d, i) {return displayCoords[i][1] * sizeFactor}) 
+        .style("fill", function(d, i) { // color inside circles
+            var j = 0;
+            for (j = 0; j < nucleoArray.length; j++) { // look thru nucleoArray
+                if(nucleoArray[j].key == d) { // find color for current value
+                    return nucleoArray[j].values[1]; // set circles fill                
                 };
-                
-            });
+            };
+            
+        });
 
-        circles.exit().remove(); // delete any leftover elements
+    circles.exit().remove(); // delete any leftover elements
 
     var text = svg.selectAll("." + displayClass + "Text") // select current potential text of displayClass
             .data(displayData);  // join displayData to selected text
 
-        text.enter() 
-            .append("text"); // add empty text elements
+    text.enter() // work with any data that has no corresponding text element
+        .append("text"); // add empty text elements to unassociated data
 
-        text.attr("class", displayClass + "Text")// set class so selectAll can find text elements
-            .attr("id", function(d, i) {return  displayClass + "Text" + i;}) // id so topCircles can find corresponding text
-            .text(function(d) {return d}) // add text from
-            .attr("x", function(d, i) {return displayCoords[i][0] * sizeFactor}) // position
-            .attr("y", function(d, i) {return displayCoords[i][1] * sizeFactor + textHeight / 2.8})
-            .attr("text-anchor", "middle") // position text by its middle
-            .style("font-size", textHeight + "px"); // size 
+    // start working with all data/svg pairs but not unpaired svg elements
+    text.attr("class", displayClass + "Text")// set class so selectAll can find text elements
+        .attr("id", function(d, i) {return  displayClass + "Text" + i;}) // id so topCircles can find corresponding text
+        .text(function(d) {return d}) // add text from displayData
+        .attr("x", function(d, i) {return displayCoords[i][0] * sizeFactor}) // position
+        .attr("y", function(d, i) {return displayCoords[i][1] * sizeFactor + textHeight / 2.8})
+        .attr("text-anchor", "middle") // position text by its middle
+        .style("font-size", textHeight + "px"); // set font size to text height
 
-        text.exit().remove(); // delete any text elements no longer associated with displayData members
+    text.exit().remove(); // delete any text elements no longer associated with displayData members
 
-        if (displayClass == "active") {  // only put top dots over active nts
+    if (displayClass == "active") {  // only put top dots over active nts, nulls do not react to 
 
-            // make clear dots to click on
-            topCircles = svg.selectAll(".topCirc") // select all elements of class topCircle
-                .data(displayData); //join displayData to topCircles
+        // make clear dots to click on over active dots
+        // null dots don't respond to click
+        topCircles = svg.selectAll(".topCirc") // select all elements of class topCircle
+            .data(displayData); //join displayData to topCircles
 
-            topCircles.enter()
-                .append("circle"); // create a circle for each element of displayData
+        topCircles.enter() // work only with data items that have no associated circles
+            .append("circle"); // create a circle for each unmatched element of displayData
 
-            topCircles.attr("class", "topCirc") // assign class topCirc to circles
-                .attr("id", function(d, i) {return "topCirc" + i})
-                .attr("cx", function(d, i) {return d3.select("#" + displayClass + "Circle" + i).attr("cx")})
-                .attr("cy", function(d, i) {return d3.select("#" + displayClass + "Circle" + i).attr("cy")})
-                .attr("r", radius)
-                .style("fill", "rgba(0, 0, 0, 0)") // fill dot with transparent black
-                // add gray outline on mouseover
-                .on("mouseover", function(){d3.select(this)
+        topCircles.attr("class", "topCirc") // assign class topCirc to circles
+            .attr("id", function(d, i) {return "topCirc" + i})
+            .attr("cx", function(d, i) {return d3.select("#" + displayClass + "Circle" + i).attr("cx")})
+            .attr("cy", function(d, i) {return d3.select("#" + displayClass + "Circle" + i).attr("cy")})
+            .attr("r", radius)
+            .style("fill", "rgba(0, 0, 0, 0)") // fill dot with transparent black
+            // add gray outline on mouseover
+            .on("mouseover", function(){d3.select(this)
+            .style("stroke", "gray")
+            .style("stroke-width", 4);})
+            // remove gray outline when not mouseover
+            .on("mouseout", function(){d3.select(this)
                 .style("stroke", "gray")
-                .style("stroke-width", 4);})
-                // remove gray outline when not mouseover
-                .on("mouseout", function(){d3.select(this)
-                    .style("stroke", "gray")
-                    .style("stroke-width", 0);})
-                // on click display next nucleotide
-                .on("click", function(d, i) {
-                    var j = 0;
-                    // cycle thru nucleoArray by j, match key to d and get new key and fill value
-                    for (j = 0; j < nucleoArray.length; j++) {
-                        if (nucleoArray[j].key == d) {
-                            var newKey = nucleoArray[(j + 1) % (nucleoArray.length - 1)].key; //get next nucleotide
-                            var newFill = nucleoArray[(j + 1) % (nucleoArray.length - 1)].values[1]; // get next color
-                            d3.select("#" + displayClass + "Text" + i) //select text element under clicked disk
-                                .data(newKey) // update text element's data 
-                                .text(newKey); // update text element's inner text
-                            d3.select(this) //select clicked topCircle
-                                .data(newKey);
-                            displayData[i] = newKey;  // update displayData to new key
-                            d3.select("#" + displayClass + "Circle" + i) //select circle behind clickedText
-                                .style("fill", newFill);  // and update to new fill
-                        };
+                .style("stroke-width", 0);})
+            // on click display next nucleotide
+            .on("click", function(d, i) {
+                var j = 0;
+                // cycle thru nucleoArray by j, match key to d and get new key and fill value
+                for (j = 0; j < nucleoArray.length; j++) {
+                    if (nucleoArray[j].key == d) {
+                        var newKey = nucleoArray[(j + 1) % (nucleoArray.length - 1)].key; //get next nucleotide
+                        var newFill = nucleoArray[(j + 1) % (nucleoArray.length - 1)].values[1]; // get next color
+                        d3.select("#" + displayClass + "Text" + i) //select text element under clicked disk
+                            .data(newKey) // update text element's data 
+                            .text(newKey); // update text element's inner text
+                        d3.select(this) //select clicked topCircle
+                            .data(newKey);
+                        displayData[i] = newKey;  // update displayData to new key
+                        d3.select("#" + displayClass + "Circle" + i) //select circle behind clickedText
+                            .style("fill", newFill);  // and update to new fill
                     };
-                });
-            
-            topCircles.exit().remove(); // get rid of any top circles not associated with data members
+                };
+            });
+        
+        topCircles.exit().remove(); // delete any topCircles not associated with data members
 
 
-        };
-        return displayData;
+    };
+    return displayData;
 }
 //rewrite so update is called only once
 // draw null NTs above and SW of bulge and 1 in circle
 update(nullDataBG, "null", nullCoordsBG, linesBG);
-// draw 4 NTs in circle of 5 NTs for bulge
+// draw the 4 active  NTs in circle of 5 NTs for bulge
 activeDataBG = update(activeDataBG, "active", activeCoordsBG, linesBG);
 
 
