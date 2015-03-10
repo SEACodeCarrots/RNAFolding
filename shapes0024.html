@@ -555,7 +555,6 @@ function update(displayData, displayClass, displayCoords, displayLines)  {
                             // nothing
 
                         };  // end switch statement
-
                 }; // end if statement
             };// end for statement
         });// end on click function
@@ -621,14 +620,22 @@ function update(displayData, displayClass, displayCoords, displayLines)  {
         .style("font-size", radius * 0.7 + "px");
 
     var circleGroup = svg.selectAll(".circleGrp" + displayClass)
-        .data(displayData)
-        .enter()
+        .data(displayData);
+    circleGroup.enter()
         .append("g")
-        .attr("class", "circleGrp" + displayClass);
+        .attr("class", "circleGrp" + displayClass)
+        .append("circle");
+    circleGroup.style("fill", "blue");
 
-    circleGroup.append("circle")
-        .attr("r", radius); //set dot size
-/*        .attr("cx", function(d, i) {return displayCoords[i][0] * sizeFactor}) // position circles
+/*
+    var circleSet = circleGroup.enter()
+        .data(displayData)
+        .append("circle")
+        .attr("class", "baseCircle");
+
+    circleGroup.selectAll(".baseCircle")
+        .attr("r", radius) //set dot size
+        .attr("cx", function(d, i) {return displayCoords[i][0] * sizeFactor}) // position circles
         .attr("cy", function(d, i) {return displayCoords[i][1] * sizeFactor}) 
         .style("fill", function(d, i) { // color inside circles
             var j = 0;
@@ -638,8 +645,11 @@ function update(displayData, displayClass, displayCoords, displayLines)  {
                 };
             };
             
-        });
-*/
+        });*/
+
+
+    circleGroup.exit()
+        .remove();
 
 
 
