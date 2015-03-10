@@ -584,48 +584,64 @@ function update(displayData, displayClass, displayCoords, displayLines)  {
             .selectAll("line") // select all lines from lineGroup
                 .data(displayLines); // join displaylines to myLines
     
-            myLines.enter() // work with new lines only
-                .append("line"); // add new line for each new data item
+        myLines.enter() // work with new lines only
+            .append("line"); // add new line for each new data item
     
-            myLines.attr("x1", function(d, i) {return d[0] * sizeFactor}) // now work with all the lines
-                .attr("x2", function(d, i) {return d[2] * sizeFactor}) // assign position and stroke
-                .attr("y1", function(d, i) {return d[1] * sizeFactor}) 
-                .attr("y2", function(d, i) {return d[3] * sizeFactor}) 
-                .attr("stroke-width", 2)
-                .attr("stroke", "black");
+        myLines.attr("x1", function(d, i) {return d[0] * sizeFactor}) // now work with all the lines
+            .attr("x2", function(d, i) {return d[2] * sizeFactor}) // assign position and stroke
+            .attr("y1", function(d, i) {return d[1] * sizeFactor}) 
+            .attr("y2", function(d, i) {return d[3] * sizeFactor}) 
+            .attr("stroke-width", 2)
+            .attr("stroke", "black");
 
-            // the exit subsection contains the lines not currently associated
-            myLines.exit() // with items from displaylines
-                .remove(); // remove any lines not representing current data
+        // the exit subsection contains the lines not currently associated
+        myLines.exit() // with items from displaylines
+            .remove(); // remove any lines not representing current data
+        }; 
 
-            }; 
-
-
+// starting rewrite of legend
     // display a legend of nts with filled circles and names
 
-    var legendCircs = svg.selectAll(".legendCircs") // select all the elements classed as legendCircs
-        .data(nucleoArray) // join nucleoArray to legendCircs
-        .enter() //begin working with data not already paired with svg elements
-        .append("circle"); // make circles for unpaired data from nucleoArray
+    var legendGroup = svg.selectAll(".legendGrp")
+        .data(nucleoArray)
+        .enter()
+        .append("g")
+        .attr("class", "legendGrp");
 
-    legendCircs.attr("class", "legendCircs") 
+    legendGroup.append("circle")
         .attr("cx", -530 * sizeFactor)
         .attr("cy", function(d, i) {return -160 * sizeFactor + i * 70 * sizeFactor})
         .attr("r", radius / 2)
-        .style("fill", function(d, i) {
-            return d.values[1]                
-        });
+        .style("fill", function(d, i) {return d.values[1]});
 
-    var legendText = svg.selectAll(".legendText")
-        .data(nucleoArray)
-        .enter()
-        .append("text");
-
-    legendText.attr("class", "legendText")
+    legendGroup.append("text")
         .attr("x", -500 * sizeFactor)
         .attr("y", function(d, i) {return -150 * sizeFactor + i * 70 * sizeFactor})
         .text(function(d, i) {return d.values[0]})
         .style("font-size", radius * 0.7 + "px");
+
+    var circleGroup = svg.selectAll(".circleGrp" + displayClass)
+        .data(displayData)
+        .enter()
+        .append("g")
+        .attr("class", "circleGrp" + displayClass);
+
+    circleGroup.append("circle")
+        .attr("r", radius); //set dot size
+/*        .attr("cx", function(d, i) {return displayCoords[i][0] * sizeFactor}) // position circles
+        .attr("cy", function(d, i) {return displayCoords[i][1] * sizeFactor}) 
+        .style("fill", function(d, i) { // color inside circles
+            var j = 0;
+            for (j = 0; j < nucleoArray.length; j++) { // look thru nucleoArray
+                if(nucleoArray[j].key == d) { // find color for current value
+                    return nucleoArray[j].values[1]; // set circles fill                
+                };
+            };
+            
+        });
+*/
+
+
 
     // draw a dot for each value in displayData per coords in displayData
     // select all circles of current display class
@@ -671,7 +687,7 @@ function update(displayData, displayClass, displayCoords, displayLines)  {
 
     text.exit().remove(); // delete any text elements no longer associated with displayData members
 
-    if (displayClass == "active") {  // only put top dots over active nts, nulls do not react to 
+    if (displayClass == "active") {  // only put top dots over active nts, nulls do not react to clicks
 
         // make clear dots to click on over active dots
         // null dots don't respond to click
