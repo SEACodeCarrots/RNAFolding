@@ -598,7 +598,6 @@ function update(displayData, displayClass, displayCoords, displayLines)  {
             .remove(); // remove any lines not representing current data
         }; 
 
-// starting rewrite of legend
     // display a legend of nts with filled circles and names
 
     var legendGroup = svg.selectAll(".legendGrp")
@@ -619,24 +618,31 @@ function update(displayData, displayClass, displayCoords, displayLines)  {
         .text(function(d, i) {return d.values[0]})
         .style("font-size", radius * 0.7 + "px");
 
+
     var circleGroup = svg.selectAll(".circleGrp" + displayClass)
         .data(displayData);
+        
     circleGroup.enter()
         .append("g")
+        .attr("transform", "translate(4)")
         .attr("class", "circleGrp" + displayClass)
-        .append("circle");
-    circleGroup.style("fill", "blue");
-
-/*
-    var circleSet = circleGroup.enter()
-        .data(displayData)
         .append("circle")
         .attr("class", "baseCircle");
+/*
+    circleGroup.enter()
+        .append("text")
+        .text(function(d) {return d});
 
-    circleGroup.selectAll(".baseCircle")
+    circleGroup.selectAll("text")
+        .attr("x", function(d, i) {return displayCoords[i][0] * sizeFactor}) // position
+        .attr("y", function(d, i) {return displayCoords[i][1] * sizeFactor + textHeight / 2.8})
+        .attr("text-anchor", "middle") // position text by its middle
+        .style("font-size", textHeight + "px"); // set font size to text height;
+*/
+    circleGroup.select(".baseCircle")
         .attr("r", radius) //set dot size
         .attr("cx", function(d, i) {return displayCoords[i][0] * sizeFactor}) // position circles
-        .attr("cy", function(d, i) {return displayCoords[i][1] * sizeFactor}) 
+        .attr("cy", function(d, i) {return displayCoords[i][1] * sizeFactor})
         .style("fill", function(d, i) { // color inside circles
             var j = 0;
             for (j = 0; j < nucleoArray.length; j++) { // look thru nucleoArray
@@ -644,8 +650,7 @@ function update(displayData, displayClass, displayCoords, displayLines)  {
                     return nucleoArray[j].values[1]; // set circles fill                
                 };
             };
-            
-        });*/
+        });
 
 
     circleGroup.exit()
