@@ -138,7 +138,7 @@ var width = window.innerWidth,
         [ 10,  290]
     ],
 
-    activeDataBG = ["A", "A", "A", "A"], 
+    activeDataBG = ["C", "A", "R", "N"], 
 
     activeCoordsBG = [
  //       cx    cy                  
@@ -618,45 +618,50 @@ function update(displayData, displayClass, displayCoords, displayLines)  {
         .text(function(d, i) {return d.values[0]})
         .style("font-size", radius * 0.7 + "px");
 
-
     var circleGroup = svg.selectAll(".circleGrp" + displayClass)
         .data(displayData);
-        
-    circleGroup.enter()
-        .append("g")
-        .attr("transform", "translate(4)")
-        .attr("class", "circleGrp" + displayClass)
-        .append("circle")
-        .attr("class", "baseCircle");
-/*
-    circleGroup.enter()
-        .append("text")
-        .text(function(d) {return d});
 
+    var circleEnter = circleGroup.enter()
+        .append("g");
+
+    circleGroup.each(function(d, i) { d.index = i; });
+
+    circleEnter.attr("class", "circleGrp" + displayClass)
+        .attr("transform", "translate(12)");
+        
+    circleEnter.append("circle")
+        .attr("class", "baseCircle");
+
+    circleEnter.append("text");
+
+    circleEnter.append("circle")
+        .attr("class", "topCircs");
+/*
     circleGroup.selectAll("text")
-        .attr("x", function(d, i) {return displayCoords[i][0] * sizeFactor}) // position
+        .attr("x", function() {
+            var indexCG = d3.select(this.parentNode).datum().index;
+            return displayCoords[indexCG][0] * sizeFactor;
+        }) // position
         .attr("y", function(d, i) {return displayCoords[i][1] * sizeFactor + textHeight / 2.8})
+        .text(function(d, i) {return i})
         .attr("text-anchor", "middle") // position text by its middle
         .style("font-size", textHeight + "px"); // set font size to text height;
 */
-    circleGroup.select(".baseCircle")
+    circleGroup.selectAll(".baseCircle")
         .attr("r", radius) //set dot size
         .attr("cx", function(d, i) {return displayCoords[i][0] * sizeFactor}) // position circles
         .attr("cy", function(d, i) {return displayCoords[i][1] * sizeFactor})
-        .style("fill", function(d, i) { // color inside circles
+        .style("fill", function(d) { // color inside circles
             var j = 0;
             for (j = 0; j < nucleoArray.length; j++) { // look thru nucleoArray
-                if(nucleoArray[j].key == d) { // find color for current value
+                if(nucleoArray[j].key == d3.select(this.parentNode).datum()) { // find color for current value
                     return nucleoArray[j].values[1]; // set circles fill                
                 };
             };
         });
 
-
     circleGroup.exit()
         .remove();
-
-
 
     // draw a dot for each value in displayData per coords in displayData
     // select all circles of current display class
